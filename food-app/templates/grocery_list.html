@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    </head>
+<body>
+<script src="static/request_helpers.js" type="text/javascript"></script>
+
+<script>
+//Makes the get request that pulls list of recipes
+function load_data(data){
+  console.log(data)
+
+  var datalist = document.getElementById('languages');
+  data.forEach(function(item) {
+    var option = document.createElement('option');
+    option.value = item;
+    datalist.appendChild(option);
+    });
+};
+</script>
+
+<script>window.onload = make_request("/recipes", load_data);</script>
+
+<script type="text/javascript">
+//Called when button clicked, will add recipe to list 
+function addRecipe(){
+  var table = document.getElementById('recipe_table');
+  var n_rows = table.rows.length;
+
+  var row = table.insertRow(-1);
+  var cell = document.createElement('td');
+  var text = document.createElement('input');
+  text.setAttribute('type', 'text')
+  var entry = document.getElementById('recipelist');
+  text.value = entry.value;
+  cell.appendChild(text)
+  row.appendChild(cell)
+};
+</script>
+
+<datalist id="languages"></datalist>
+
+<P>Please Select your Recipes</P>
+<input id="recipelist" type="email" list="languages" multiple>
+<input id="clickMe" type="button" value="Add Recipe" onclick="addRecipe();" />
+
+<p>Recipes Selected</p>
+<form id='recipe_form'>
+  <table id='recipe_table'>
+  <tbody>
+  </tbody>
+  </table>
+  <input id="clickMe" type="button" value="Create Shopping List" onclick="createList();" />
+  <br/>
+</form>
+
+<p>Shopping List</p>
+<form id='grocery_form' onsubmit="return post_request()">
+  <table id='grocery_table'>
+  <tr>
+    <th>Food Name</th>
+    <th>Food Units</th>
+    <th>Food Units Name</th>
+    <th>Food Alt Units</th>
+    <th>Food Alt Name</th>
+  </tr>
+  </table>
+  <input type="submit" value="Submit">
+  <br/>
+</form>
+
+<script type="text/javascript">
+//Generates grocery list from selections
+
+function createList(){
+    var myTableArray = [];
+
+    $('#recipe_table tr').has('td').each(function() {
+        $('td', $(this)).each(function(index, item) {
+            arrayitem = $(item).find('input').val()//.html();
+            myTableArray.push(arrayitem)
+        });
+    });
+
+    //Given array, make request
+    var queryString = myTableArray.join();
+
+    ulr_str = "/recipes" + "?recipe=" + queryString 
+    console.log(ulr_str)
+    make_request(ulr_str,createTable);
+};
+</script>
+
+<script>
+//Builds the table containing the grocery list
+function createTable(tableData) {
+
+  var table = document.getElementById('grocery_table')
+
+  var tableBody = document.createElement('tbody');
+
+  tableData.forEach(function(rowData) {
+    var row = document.createElement('tr');
+
+    rowData.forEach(function(cellData) {
+      var cell = document.createElement('td');
+      var text = document.createElement('input')
+      text.setAttribute('type', 'text')
+      text.value = cellData
+      cell.appendChild(text);
+      row.appendChild(cell);
+    });
+
+    tableBody.appendChild(row);
+  });
+
+  table.appendChild(tableBody);
+};
+</script>
+
+<script type="text/javascript">
+
+function post_request(){
+  var array = [];
+  var headers = [];
+  $('#grocery_table th').each(function(index, item) {
+      headers[index] = $(item).html();
+  });
+  $('#grocery_table tr').has('td').each(function() {
+      var arrayItem = {};
+      $('td', $(this)).each(function(index, item) {
+          arrayItem[headers[index]] = $(item).find('input').val()//.html();
+      });
+      array.push(arrayItem);
+  });
+  var data = JSON.stringify(array);
+
+  url = "/lists"
+  var xhr = createCORSRequest('POST', url);
+  if (!xhr) {
+    throw new Error('CORS not supported');
+  }
+
+  xhr.setRequestHeader("Content-type", "application/json");
+
+  xhr.onerror = function() {console.log('There was an error!');};
+
+  console.log(data)
+  xhr.send(data);
+  return false;
+};
+</script>

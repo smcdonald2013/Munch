@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    </head>
+<body>
+<script src="static/request_helpers.js" type="text/javascript"></script>
+
+<script>
+//Makes the get request that pulls list of recipes
+function load_data(data){
+  console.log(data)
+  //data = String(data)
+  //data = data.replace(/[\[\]"]+/g,'');
+  //data = data.split(',');
+  //console.log(data['items'])
+
+  var r = document.getElementById('recipe_form');
+  r.setAttribute('onsubmit', "return post_request()");
+
+  var new_hidden = document.createElement('input');
+  new_hidden.setAttribute('type', 'hidden');
+  new_hidden.setAttribute('id', 'hidden_input');
+  hidden_spot = document.getElementById('hidden');
+  hidden_spot.appendChild(new_hidden)
+
+  var f = document.createElement("form");
+  var g = document.createElement("select");
+  g.setAttribute('id',"item_list");
+  f.appendChild(g)
+  f.setAttribute('onchange', "return fill_selection()");
+  var def = document.createElement("option");
+  def.value = "Please Select a Recipe";
+  def.textContent = "Please Select a Recipe";
+  var other = document.createElement("option");
+  other.value = "New Recipe";
+  other.textContent = "New Recipe";
+  g.appendChild(def)
+  g.appendChild(other)
+
+  for (var x in data) {
+      var i = document.createElement("option"); //input element, text
+      i.textContent = data[x];
+      i.value = data[x]
+      g.appendChild(i);
+  }
+
+  document.getElementById('list').appendChild(f);
+};
+
+//Fills recipe selected (calls create table)
+function fill_selection(){
+  selection = document.getElementById('item_list').value
+  var hidden = document.getElementById('hidden_input');
+  if (selection == "New Recipe"){
+    hidden.type = 'text';
+    var table = document.getElementById('recipe_table');
+    while(table.rows.length > 1) {
+      table.deleteRow(-1);
+    }
+    addRow();
+  }
+  else {
+    hidden.type = 'hidden';
+    ulr_str = "/recipes?recipe=" + selection
+    make_request(ulr_str,createTable);
+  }
+};
+</script>
+
+<script>window.onload = make_request("/recipes", load_data);</script>
+
+<script>
+//Builds the table containing the recipe
+function createTable(tableData) {
+
+  var table = document.getElementById('recipe_table')
+  while(table.rows.length > 1) {
+  table.deleteRow(-1);
+  }
+  var tableBody = document.createElement('tbody');
+
+  tableData.forEach(function(rowData) {
+    var row = document.createElement('tr');
+
+    rowData.forEach(function(cellData) {
+      var cell = document.createElement('td');
+      var text = document.createElement('input')
+      text.setAttribute('type', 'text')
+      text.value = cellData
+      cell.appendChild(text);
+      row.appendChild(cell);
+    });
+
+    tableBody.appendChild(row);
+  });
+
+  table.appendChild(tableBody);
+};
+</script>
+
+<script type="text/javascript">
+
+//Called when button clicked, will create the item list if it doesn't exist, else just adds a row. 
+function addRow(){
+  var table = document.getElementById('recipe_table');
+  var n_rows = table.rows.length;
+
+  var exist = document.getElementById('item')
+  if (exist == null) {
+      item_list();
+      var row = table.insertRow(-1);
+  }
+  else { var row = table.insertRow(n_rows-1);}
+
+
+  var i = 0
+  while (i < 5) {
+    var cell = document.createElement('td');
+    var text = document.createElement('input');
+    text.setAttribute('type', 'text')
+    text.setAttribute('id',"cell" + i.toString()); //This is new
+    cell.appendChild(text)
+    row.appendChild(cell)
+    i++;
+  }
+};
+
+//Gets the list of food items. 
+function item_list(){
+  ulr_str = "/items"
+  make_request(ulr_str,fill_data)
+};
+
+//Fills the list of food items. 
+function fill_data(data){
+  data = String(data)
+  data = data.replace(/[\[\]"]+/g,'');
+  data = data.split(',');
+  var table = document.getElementById('recipe_table');
+  var n_rows = table.rows.length;
+  var row = table.insertRow(n_rows);
+  var cell = document.createElement('td');
+  var f = document.createElement("form");
+  f.setAttribute('onchange', "return fill_item()");
+  var g = document.createElement("select");
+  g.setAttribute('id',"item");
+  f.appendChild(g)
+  cell.appendChild(f)
+  row.appendChild(cell)
+
+  var def = document.createElement("option");
+  def.value = "Please Select an Item";
+  def.textContent = "Please Select an Item";
+  g.appendChild(def)
+
+  for (var x in data) {
+    var i = document.createElement("option"); //input element, text
+    i.textContent = data[x]
+    i.value = data[x]
+    g.appendChild(i)
+  }
+};
+
+//Fills the food item details when the item is selected
+function fill_item(){
+  selection = document.getElementById('item').value
+  ulr_str = "/items?item=" + selection
+  console.log(ulr_str)
+  var xhr = createCORSRequest('GET', ulr_str);
+  xhr.send(null)
+
+  xhr.onload = function() {
+   var responseText = xhr.responseText;
+   console.log(responseText);
+   var parse = JSON.parse(responseText);
+   console.log(parse)
+   var split = parse[0];
+   var dta = document.getElementsByTagName('tr');
+   n_rows = dta.length;
+   var inp = dta[n_rows-2].getElementsByTagName('input');
+   inp[0].value = split[1];
+   inp[2].value = split[6];
+  };
+};
+</script>
+
+<script type="text/javascript">
+
+//Sends the recipe to the API
+function post_request(){
+  var array = [];
+  var headers = [];
+  $('#recipe_table th').each(function(index, item) {
+      headers[index] = $(item).html();
+  });
+  $('#recipe_table tr').has('td').each(function() {
+      var arrayItem = {};
+      $('td', $(this)).each(function(index, item) {
+          arrayItem[headers[index]] = $(item).find('input').val()//.html();
+      });
+      array.push(arrayItem);
+  });
+
+  var e = document.getElementById("item_list");
+  var hidden = document.getElementById('hidden_input');
+  if (e.value == "New Recipe"){
+    var recipe_name = hidden.value;
+    console.log(recipe_name);
+  }
+  else { var recipe_name = e.value;}
+
+
+  for(var i = 0; i < array.length; i++) {
+    var item = array[i]
+    item['Recipe_Name'] = recipe_name
+  }
+  //console.log(array)
+  var data = JSON.stringify(array);
+
+  url = "/recipes"
+
+  var xhr = createCORSRequest('POST', url);
+  if (!xhr) {
+    throw new Error('CORS not supported');
+  }
+
+  xhr.setRequestHeader("Content-type", "application/json");
+
+  xhr.onerror = function() {console.log('There was an error!');};
+
+  console.log(data)
+  xhr.send(data);
+  //post_request(url, data);
+  return false;
+};
+</script>
+
+<div id="list">
+</div>
+<div id='hidden'>
+</div>
+<form id='recipe_form'>
+  <table id='recipe_table'>
+  <tr>
+    <th>Food Name</th>
+    <th>Food Units</th>
+    <th>Food Units Name</th>
+    <th>Food Alt Units</th>
+    <th>Food Alt Name</th>
+  </tr>
+  <tbody>
+      <tr>
+      <td><INPUT TYPE="TEXT" NAME="Food_Name" SIZE="20" id='fn'></td>
+      <td><INPUT TYPE="TEXT" NAME="Food_Units" SIZE="20" id='fu'></td>
+      <td><INPUT TYPE="TEXT" NAME="Food_Units_Name" SIZE="20" id='fun'></td>
+      <td><INPUT TYPE="TEXT" NAME="Food_Alt_Units" SIZE="20" id='fau'></td>
+      <td><INPUT TYPE="TEXT" NAME="Food_Alt_Name" SIZE="20" id='fan'></td>
+      </tr>
+  </tbody>
+  </table>
+  <input type="submit" value="Submit">
+  <br/>
+</form>
+
+<input id="clickMe" type="button" value="Add Row" onclick="addRow();" />
+
+</body>
+</html>
