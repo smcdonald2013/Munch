@@ -11,7 +11,6 @@ from config import SQLALCHEMY_DATABASE_URI
 
 def item_lookup(item=None):
     engine = sqlalchemy.create_engine(SQLALCHEMY_DATABASE_URI)
-    #engine = db.engine
     if item is not None:   
         sql_string =  ("SELECT * " 
                         "FROM Prices as p " 
@@ -20,7 +19,8 @@ def item_lookup(item=None):
         #df = pd.read_sql_query(sql_string, engine)
     else: #If no item is provided, pull all of them
         sql_string =  ("SELECT * " 
-                       "FROM Prices as p ")
+                       "FROM Prices as p "
+                       "ORDER BY p.Food_Name")
         df = pd.read_sql_query(sql_string, engine)
     df['Price_Cooking_Unit'] = df['Price_Purchase_Unit'].divide(df['Num_Cooking_Unit'])
     return df
