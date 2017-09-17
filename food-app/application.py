@@ -120,12 +120,11 @@ def get_recipe():
             #text_df = data.drop_duplicates('Food_Name')[['Food_Name', 'Price_Cooking_Unit', 'Food_Units_Name']]
             #text_df = text_df.sort_values(by='Food_Name').set_index('Food_Name')
             num_df = data.groupby('Food_Name').sum()['Food_Units']
-            text_df = data.drop_duplicates('Food_Name')[['Food_Name', 'Food_Units_Name']]
+            text_df = data.drop_duplicates('Food_Name')[['Food_Name', 'Food_Units_Name', 'Food_Alt_Units', 'Food_Alt_Name']]
             text_df = text_df.sort_values(by='Food_Name').set_index('Food_Name')
-            #data_df = num_df.merge(text_df, left_index=True, right_index=True).round(decimals=2).reset_index()
             text_df['Food_Units'] = num_df
             text_df = text_df.round(decimals=2).reset_index()
-            text_df = text_df[['Food_Name', 'Food_Units', "Food_Units_Name"]]
+            text_df = text_df[["Food_Name", "Food_Units", "Food_Units_Name", "Food_Alt_Name", "Food_Units"]]
             data_json = text_df.to_json(orient='values')
     else: 
         data_df = recipe_lookup()['Recipe_Name'].drop_duplicates()
