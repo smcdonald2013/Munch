@@ -16,7 +16,6 @@ def item_lookup(item=None):
                         "FROM Prices as p " 
                         "WHERE p.Food_Name = %s ")
         df = pd.read_sql_query(sql_string, engine, params=(item,))
-        #df = pd.read_sql_query(sql_string, engine)
     else: #If no item is provided, pull all of them
         sql_string =  ("SELECT * " 
                        "FROM Prices as p "
@@ -83,13 +82,6 @@ def get_item():
         df = item_lookup(item_new).to_json(orient='values')
     else:
         df = item_lookup()['Food_Name'].to_json(orient='records') #Returning this works locally
-        #df = item_lookup().to_json(orient='records')
-        #df = item_lookup().to_dict(orient='records')
-        #df_json = {'items' : df}
-    #return jsonify(items)
-    #return jsonify(df)
-    #return jsonify(df_json)
-    #return jsonify( { 'tasks': tasks } )
     return df
 
 @application.route('/items', methods=['POST'])
@@ -114,11 +106,6 @@ def get_recipe():
             application.logger.debug(df)
             df = df.drop(['ID', 'Recipe_Name'], axis=1)
             data = pd.concat([data, df])
-            #data_json = data.to_json(orient='values') 
-            #At this point, data is dataframe from recipe table. 
-            #num_df = data.groupby('Food_Name').sum()[['Food_Units', 'Ingredient_Cost']] #.reset_index()
-            #text_df = data.drop_duplicates('Food_Name')[['Food_Name', 'Price_Cooking_Unit', 'Food_Units_Name']]
-            #text_df = text_df.sort_values(by='Food_Name').set_index('Food_Name')
             num_df = data.groupby('Food_Name').sum()['Food_Units']
             text_df = data.drop_duplicates('Food_Name')[['Food_Name', 'Food_Units_Name', 'Food_Alt_Units', 'Food_Alt_Name']]
             text_df = text_df.sort_values(by='Food_Name').set_index('Food_Name')
@@ -137,16 +124,15 @@ def create_recipe():
     application.logger.debug(data)
     data_json = json.loads(data, object_pairs_hook=deunicodify_hook)
     application.logger.debug(data_json)
-    data_df = pd.DataFrame(data_json).iloc[:-1] #Need to fix for there isn't extra column
+    data_df = pd.DataFrame(data_json)#.iloc[:-1] #Need to fix so there isn't extra column
     data_df.columns = [x.replace(" ", "_") for x in data_df.columns]
     data_df = data_df[['Recipe_Name','Food_Name', 'Food_Units', 'Food_Units_Name', 'Food_Alt_Units', 'Food_Alt_Name']]
     application.logger.debug(data_df)
-    sql_insert(data_df, table='Recipes')
+    #sql_insert(data_df, table='Recipes')
     return data_df.to_json(orient='values')
 
 @application.route("/lists", methods=['GET'])
 def get_list():  
-    #df = list_lookup().to_json(orient='records') 
     df = list_lookup().to_json(orient='values') #Returning this works locally
     return df
 
