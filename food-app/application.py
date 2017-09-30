@@ -77,12 +77,18 @@ def edit_list():
 @application.route("/items", methods=['GET'])
 def get_item():  
     if 'item' in request.args:
-        application.logger.debug(request.args['item'])
-        item_new = str(request.args['item']).strip('\'') #Need to remove quotes for pymysql to handle strings properly
-        df = item_lookup(item_new).to_json(orient='values')
+        ids = request.args.get('item')
+        a = ids.split(",") 
+        data = pd.DataFrame()
+        for item in a:
+            item_new = str(item).strip('\'') #Need to remove quotes for pymysql to handle strings properly
+            df = item_lookup(item_new)
+            application.logger.debug(df)
+            data = pd.concat([data, df])
+            data_json = data.to_json(orient='values') #Should probably move out of for loop.
     else:
-        df = item_lookup()['Food_Name'].to_json(orient='records') #Returning this works locally
-    return df
+        data_json = item_lookup()['Food_Name'].to_json(orient='records') #Returning this works locally
+    return data_json
 
 @application.route('/items', methods=['POST'])
 def create_item():
@@ -112,7 +118,7 @@ def get_recipe():
             text_df['Food_Units'] = num_df
             text_df = text_df.round(decimals=2).reset_index()
             text_df = text_df[["Food_Name", "Food_Units", "Food_Units_Name", "Food_Alt_Name", "Food_Units"]]
-            data_json = text_df.to_json(orient='values')
+            data_json = text_df.to_json(orient='values') #Should probably move out of for loop. 
     else: 
         data_df = recipe_lookup()['Recipe_Name'].drop_duplicates()
         data_json = data_df.to_json(orient='records')
@@ -128,7 +134,7 @@ def create_recipe():
     data_df.columns = [x.replace(" ", "_") for x in data_df.columns]
     data_df = data_df[['Recipe_Name','Food_Name', 'Food_Units', 'Food_Units_Name', 'Food_Alt_Units', 'Food_Alt_Name']]
     application.logger.debug(data_df)
-    #sql_insert(data_df, table='Recipes')
+    sql_insert(data_df, table='Recipes')
     return data_df.to_json(orient='values')
 
 @application.route("/lists", methods=['GET'])
