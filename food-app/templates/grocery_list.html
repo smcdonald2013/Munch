@@ -118,6 +118,8 @@ function addItem(){
   <br/>
 </form>
 <input id="clickMe" type="button" value="Sort Grocery List" onclick="sortTable();" />
+<input id="clickMe" type="button" value="Pull List" onclick="pullList();" />
+
 
 <script type="text/javascript">
 //Generates grocery list from selections
@@ -294,5 +296,11 @@ function sortTable() {
       switching = true;
     }
   }
+}
+</script>
+
+<script type="text/javascript">
+function pullList() {
+  make_request("/lists", createTable);
 }
 </script>

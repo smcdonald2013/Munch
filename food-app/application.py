@@ -139,8 +139,12 @@ def create_recipe():
 
 @application.route("/lists", methods=['GET'])
 def get_list():  
-    df = list_lookup().to_json(orient='values') #Returning this works locally
-    return df
+    df = list_lookup()
+    df = df[['Food_Name', 'Num_Cooking_Unit', 'Name_Cooking_Unit']]
+    df['Food_Alt_Units'] = ""
+    df['Food_Alt_Name'] = ""
+    data_json = df.to_json(orient='values')
+    return data_json
 
 @application.route('/lists', methods=['POST'])
 def create_list():
