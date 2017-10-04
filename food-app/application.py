@@ -3,6 +3,7 @@ from flask_cors import CORS, cross_origin
 import sqlalchemy
 import pandas as pd
 import json
+import datetime 
 
 application = Flask(__name__, static_url_path='/static')
 CORS(application)
@@ -42,7 +43,8 @@ def recipe_lookup(recipe=None):
 def list_lookup():
     engine = sqlalchemy.create_engine(SQLALCHEMY_DATABASE_URI)
     sql_string =  ("SELECT * " 
-                    "FROM Lists as l ")
+                    "FROM ListsNew as l "
+                    "WHERE DATE_ID = (SELECT MAX(DATE_ID) as latest_date FROM ListsNew sub)")
     df = pd.read_sql_query(sql_string, engine)
     return df
 
@@ -149,15 +151,21 @@ def get_list():
 @application.route('/lists', methods=['POST'])
 def create_list():
     data = request.data
-    application.logger.debug(data)
+    #application.logger.debug(data)
     data_json = json.loads(data, object_pairs_hook=deunicodify_hook)
     application.logger.debug(data_json)
     data_df = pd.DataFrame(data_json)
-    #data_df.columns = [x.replace(" ", "_") for x in data_df.columns]
-    data_df.columns = ['Food_Name', 'Num_Cooking_Unit', 'Name_Cooking_Unit']
-    data_df['Customer_ID'] = 1
     application.logger.debug(data_df)
-    sql_insert(data_df, table='Lists')
+    #data_df.columns = [x.replace(" ", "_") for x in data_df.columns]
+    #data_df.columns = ['Food_Name', 'Num_Cooking_Unit', 'Name_Cooking_Unit']
+    #data_df.columns = ['Food_Name', 'Num_Cooking_Unit', 'Name_Cooking_Unit', 'Food_Alt_Units', 'Food_Alt_Name']
+    data_df = data_df[['Food Name', 'Food Units', 'Food Units Name']]
+    data_df.columns = ['Food_Name', 'Num_Cooking_Unit', 'Name_Cooking_Unit']
+    data_df['Date_ID'] = datetime.datetime.now()
+    data_df = data_df[['Date_ID','Food_Name', 'Num_Cooking_Unit', 'Name_Cooking_Unit']]
+    application.logger.debug(data_df)
+    #sql_insert(data_df, table='Lists')
+    sql_insert(data_df, table='ListsNew')
     return data_df.to_json(orient='values')
 
 ###Helper functions
