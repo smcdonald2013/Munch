@@ -119,7 +119,10 @@ def get_recipe():
             text_df = text_df.sort_values(by='Food_Name').set_index('Food_Name')
             text_df['Food_Units'] = num_df
             text_df = text_df.round(decimals=2).reset_index()
-            text_df = text_df[["Food_Name", "Food_Units", "Food_Units_Name", "Food_Alt_Name", "Food_Units"]]
+            #text_df = text_df[["Food_Name", "Food_Units", "Food_Units_Name", "Food_Alt_Name", "Food_Units"]]
+            text_df = text_df[["Food_Name", "Food_Units", "Food_Units_Name"]]
+            text_df['Food_Alt_Units'] = ""
+            text_df['Food_Alt_Name'] = ""
             data_json = text_df.to_json(orient='values') #Should probably move out of for loop. 
     else: 
         data_df = recipe_lookup()['Recipe_Name'].drop_duplicates()
