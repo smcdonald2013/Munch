@@ -9,6 +9,17 @@
 <script>
 //Makes the get request that pulls list of recipes
 function load_recipes(data){
+  data = data['data']
+  //Converting to multidimensional array
+  var outputData = [];
+
+  for(var i = 0; i < data.length; i++) {
+      var input = data[i];
+
+      outputData.push([input.Recipe_Name]);
+  }
+  data = outputData
+  //Old form happened here
   console.log(data)
 
   var datalist = document.getElementById('recipes');
@@ -23,6 +34,18 @@ function load_recipes(data){
 <script>
 //Makes the get request that pulls list of recipes
 function load_items(data){
+  data = data['data']
+  //Converting to multidimensional array
+  var outputData = [];
+
+  for(var i = 0; i < data.length; i++) {
+      var input = data[i];
+
+      outputData.push([input.Food_Name]);
+  }
+  data = outputData
+  //Old form happened here
+
   console.log(data)
 
   var datalist = document.getElementById('items');
@@ -166,6 +189,17 @@ function createItemList(){
 <script type="text/javascript">
 //Builds the table containing the grocery list
 function createTable(tableData) {
+  tableData = tableData['data']
+  //Converting to multidimensional array
+  var outputData = [];
+
+  for(var i = 0; i < tableData.length; i++) {
+      var input = tableData[i];
+
+      outputData.push([input.Food_Name, input.Food_Units,input.Food_Units_Name,input.Food_Alt_Units,input.Food_Alt_Name]);
+  }
+  tableData = outputData
+  //Old form happened here
   console.log(tableData)
   var table = document.getElementById('grocery_table')
 
@@ -193,7 +227,17 @@ function createTable(tableData) {
 <script type="text/javascript">
 //Builds the table containing the grocery list
 function createTableItem(tableData) {
+  tableData = tableData['data']
+  //Converting to multidimensional array
+  var outputData = [];
 
+  for(var i = 0; i < tableData.length; i++) {
+      var input = tableData[i];
+
+      outputData.push([input.Food_Name,input.Num_Purchase_Unit,input.Name_Purchase_Unit,input.Price_Purchase_Unit,input.Num_Cooking_Unit,input.Name_Cooking_Unit]);
+  }
+  tableData = outputData
+  //Old form happened here
   console.log(tableData)
 
   var table = document.getElementById('grocery_table')
@@ -210,10 +254,10 @@ function createTableItem(tableData) {
       text.setAttribute('type', 'text')
       text.setAttribute('id',"cell" + i.toString()); //This is new
       if (i ==0){
-        text.value = rowData[1]
+        text.value = rowData[0]
       }
       if (i == 2) {
-        text.value = rowData[6]
+        text.value = rowData[5]
       }
       cell.appendChild(text)
       row.appendChild(cell)

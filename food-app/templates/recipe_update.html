@@ -9,6 +9,7 @@
 <script>
 //Makes the get request that pulls list of recipes
 function load_data(data){
+  data = data['data']
   var r = document.getElementById('recipe_form');
   r.setAttribute('onsubmit', "return post_request()");
 
@@ -34,8 +35,8 @@ function load_data(data){
 
   for (var x in data) {
       var i = document.createElement("option"); //input element, text
-      i.textContent = data[x];
-      i.value = data[x]
+      i.textContent = data[x]['Recipe_Name'];
+      i.value = data[x]['Recipe_Name']
       g.appendChild(i);
   }
 
@@ -57,6 +58,7 @@ function fill_selection(){
   else {
     hidden.type = 'hidden';
     ulr_str = "/recipes?recipe=" + selection
+    console.log(document.getElementById('item_list'))
     make_request(ulr_str,createTable);
   }
 };
@@ -67,7 +69,17 @@ function fill_selection(){
 <script>
 //Builds the table containing the recipe
 function createTable(tableData) {
-  console.log(tableData)
+  tableData = tableData['data']
+  //Converting to multidimensional array
+  var outputData = [];
+
+  for(var i = 0; i < tableData.length; i++) {
+      var input = tableData[i];
+
+      outputData.push([input.Food_Name, input.Food_Units,input.Food_Units_Name,input.Food_Alt_Units,input.Food_Alt_Name]);
+  }
+  tableData = outputData
+  //Old form happened here
   var table = document.getElementById('recipe_table')
   while(table.rows.length > 1) {
   table.deleteRow(-1);
@@ -128,9 +140,17 @@ function item_list(){
 
 //Fills the list of food items. 
 function fill_data(data){
-  data = String(data)
-  data = data.replace(/[\[\]"]+/g,'');
-  data = data.split(',');
+  data = data['data']
+  //Converting to multidimensional array
+  var outputData = [];
+
+  for(var i = 0; i < data.length; i++) {
+      var input = data[i];
+
+      outputData.push([input.Food_Name]);
+  }
+  data = outputData
+  //Old form happened here
   var table = document.getElementById('recipe_table');
   var n_rows = table.rows.length;
   var row = table.insertRow(n_rows);
@@ -168,13 +188,14 @@ function fill_item(){
    var responseText = xhr.responseText;
    console.log(responseText);
    var parse = JSON.parse(responseText);
-   console.log(parse)
-   var split = parse[0];
+   var data = parse['data'][0]
+   console.log(data)
+   //var split = parse[0];
    var dta = document.getElementsByTagName('tr');
    n_rows = dta.length;
    var inp = dta[n_rows-2].getElementsByTagName('input');
-   inp[0].value = split[1];
-   inp[2].value = split[6];
+   inp[0].value = data['Food_Name'];
+   inp[2].value = data['Name_Cooking_Unit'];
   };
 };
 </script>

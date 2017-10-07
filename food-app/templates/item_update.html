@@ -23,6 +23,17 @@ function load_data(data){
   g.appendChild(def)
   g.appendChild(other)
 
+  data = data['data']
+  //Converting to multidimensional array
+  var outputData = [];
+
+  for(var i = 0; i < data.length; i++) {
+      var input = data[i];
+
+      outputData.push([input.Food_Name]);
+  }
+  data = outputData
+  //Old form happened here
   for (var x in data) {
       var i = document.createElement("option"); //input element, text
       i.textContent = data[x];
@@ -53,15 +64,14 @@ function fill_selection(){
 
 //Fills the fields with request data
 function process_request(data){
-  data = String(data)
-  data = data.replace(/[\[\]"]+/g,'');
-  split = data.split(',');
-  document.getElementById('Name').value = split[1];
-  document.getElementById('NumPU').value = split[2];
-  document.getElementById('NamePU').value = split[3];
-  document.getElementById('PPU').value = split[4];
-  document.getElementById('NumCU').value = split[5];
-  document.getElementById('NameCU').value = split[6];
+  var data = data['data'][0]
+  console.log(data)
+  document.getElementById('Name').value = data['Food_Name'];
+  document.getElementById('NumPU').value = data['Num_Purchase_Unit'];
+  document.getElementById('NamePU').value = data['Name_Purchase_Unit'];
+  document.getElementById('PPU').value = data['Price_Purchase_Unit'];
+  document.getElementById('NumCU').value = data['Num_Cooking_Unit'];
+  document.getElementById('NameCU').value = data['Name_Cooking_Unit'];
 };
 </script>
 

@@ -87,10 +87,16 @@ def get_item():
             df = item_lookup(item_new)
             application.logger.debug(df)
             data = pd.concat([data, df])
-            data_json = data.to_json(orient='values') #Should probably move out of for loop.
+        data_json = data.to_json(orient='records') #Should probably move out of for loop.
+        data_dict = json.loads(data_json)
+        data_dict_final = {'data': data_dict}
+        data_final_json = json.dumps(data_dict_final)
     else:
-        data_json = item_lookup()['Food_Name'].to_json(orient='records') #Returning this works locally
-    return data_json
+        data_json =pd.DataFrame(item_lookup()['Food_Name']).to_json(orient='records')
+        data_dict = json.loads(data_json)
+        data_dict_final = {'data': data_dict}
+        data_final_json = json.dumps(data_dict_final)
+    return data_final_json
 
 @application.route('/items', methods=['POST'])
 def create_item():
@@ -123,11 +129,18 @@ def get_recipe():
             text_df = text_df[["Food_Name", "Food_Units", "Food_Units_Name"]]
             text_df['Food_Alt_Units'] = ""
             text_df['Food_Alt_Name'] = ""
-            data_json = text_df.to_json(orient='values') #Should probably move out of for loop. 
+            text_df = text_df[["Food_Name", "Food_Units", "Food_Units_Name", "Food_Alt_Units", "Food_Alt_Name"]]
+        data_json = text_df.to_json(orient='records') #Should probably move out of for loop. 
+        data_dict = json.loads(data_json)
+        data_dict_final = {'data': data_dict}
+        data_final_json = json.dumps(data_dict_final)
     else: 
-        data_df = recipe_lookup()['Recipe_Name'].drop_duplicates()
+        data_df = pd.DataFrame(recipe_lookup()['Recipe_Name'].drop_duplicates())
         data_json = data_df.to_json(orient='records')
-    return data_json
+        data_dict = json.loads(data_json)
+        data_dict_final = {'data': data_dict}
+        data_final_json = json.dumps(data_dict_final)
+    return data_final_json
 
 @application.route('/recipes', methods=['POST'])
 def create_recipe():
