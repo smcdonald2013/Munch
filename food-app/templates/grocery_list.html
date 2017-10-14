@@ -2,6 +2,7 @@
 <html>
     <head>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="mystyle.css"></head>
     </head>
 <body>
 <script src="static/request_helpers.js" type="text/javascript"></script>
@@ -9,51 +10,30 @@
 <script>
 //Makes the get request that pulls list of recipes
 function load_recipes(data){
+  var g = document.getElementById('recipes');
   data = data['data']
-  //Converting to multidimensional array
-  var outputData = [];
-
-  for(var i = 0; i < data.length; i++) {
-      var input = data[i];
-
-      outputData.push([input.Recipe_Name]);
+  
+  for (var x in data) {
+    var i = document.createElement("option"); //input element, text
+    i.textContent = data[x]['Recipe_Name'];
+    i.value = data[x]['Recipe_Name']
+    g.appendChild(i);
   }
-  data = outputData
-  //Old form happened here
-  console.log(data)
-
-  var datalist = document.getElementById('recipes');
-  data.forEach(function(item) {
-    var option = document.createElement('option');
-    option.value = item;
-    datalist.appendChild(option);
-    });
 };
 </script>
 
 <script>
 //Makes the get request that pulls list of recipes
 function load_items(data){
+  var g = document.getElementById('items');
   data = data['data']
-  //Converting to multidimensional array
-  var outputData = [];
-
-  for(var i = 0; i < data.length; i++) {
-      var input = data[i];
-
-      outputData.push([input.Food_Name]);
+  
+  for (var x in data) {
+    var i = document.createElement("option"); //input element, text
+    i.textContent = data[x]['Food_Name'];
+    i.value = data[x]['Food_Name']
+    g.appendChild(i);
   }
-  data = outputData
-  //Old form happened here
-
-  console.log(data)
-
-  var datalist = document.getElementById('items');
-  data.forEach(function(item) {
-    var option = document.createElement('option');
-    option.value = item;
-    datalist.appendChild(option);
-    });
 };
 </script>
 
@@ -61,33 +41,15 @@ function load_items(data){
 <script>window.onload = make_request("/items", load_items);</script>
 
 <script type="text/javascript">
-//Called when button clicked, will add recipe to list 
-function addRecipe(){
-  var table = document.getElementById('recipe_table');
+function addToList(tableid, listid){
+  var table = document.getElementById(tableid);
   var n_rows = table.rows.length;
 
   var row = table.insertRow(-1);
   var cell = document.createElement('td');
   var text = document.createElement('input');
   text.setAttribute('type', 'text')
-  var entry = document.getElementById('recipelist');
-  text.value = entry.value;
-  cell.appendChild(text)
-  row.appendChild(cell)
-};
-</script>
-
-<script type="text/javascript">
-//Called when button clicked, will add item to list 
-function addItem(){
-  var table = document.getElementById('item_table');
-  var n_rows = table.rows.length;
-
-  var row = table.insertRow(-1);
-  var cell = document.createElement('td');
-  var text = document.createElement('input');
-  text.setAttribute('type', 'text')
-  var entry = document.getElementById('itemlist');
+  var entry = document.getElementById(listid);
   text.value = entry.value;
   cell.appendChild(text)
   row.appendChild(cell)
@@ -98,7 +60,8 @@ function addItem(){
 
 <P>Please Select your Recipes</P>
 <input id="recipelist" type="email" list="recipes" multiple>
-<input id="clickMe" type="button" value="Add Recipe" onclick="addRecipe();" />
+<!--<input id="clickMe" type="button" value="Add Recipe" onclick="addRecipe();" />-->
+<input id="clickMe" type="button" value="Add Recipe" onclick="addToList('recipe_table', 'recipelist');" />
 
 <p>Recipes Selected</p>
 <form id='recipe_form'>
@@ -106,7 +69,8 @@ function addItem(){
   <tbody>
   </tbody>
   </table>
-  <input id="clickMe" type="button" value="Create Shopping List" onclick="createRecipeList();" />
+  <!--<input id="clickMe" type="button" value="Create Shopping List" onclick="createRecipeList();" />-->
+  <input id="clickMe" type="button" value="Create Shopping List" onclick="createList('#recipe_table tr', '/recipes?recipe=', createTable);" />
   <br/>
 </form>
 
@@ -114,7 +78,8 @@ function addItem(){
 
 <P>Add Additional Items</P>
 <input id="itemlist" type="email" list="items" multiple>
-<input id="clickMe" type="button" value="Add Item" onclick="addItem();" />
+<!--<input id="clickMe" type="button" value="Add Item" onclick="addItem();" />-->
+<input id="clickMe" type="button" value="Add Item" onclick="addToList('item_table', 'itemlist');" />
 
 <p>Items Selected</p>
 <form id='item_form'>
@@ -122,7 +87,8 @@ function addItem(){
   <tbody>
   </tbody>
   </table>
-  <input id="clickMe" type="button" value="Create Shopping List" onclick="createItemList();" />
+  <!--<input id="clickMe" type="button" value="Create Shopping List" onclick="createItemList();" />-->
+  <input id="clickMe" type="button" value="Create Shopping List" onclick="createList('#item_table tr', '/items?item=', createTableItem);" />
   <br/>
 </form>
 
@@ -143,130 +109,72 @@ function addItem(){
 <input id="clickMe" type="button" value="Sort Grocery List" onclick="sortTable();" />
 <input id="clickMe" type="button" value="Pull List" onclick="pullList();" />
 
-
 <script type="text/javascript">
 //Generates grocery list from selections
-function createRecipeList(){
-    var myTableArray = [];
+function createList(tablestring, urlbase, requestfunc){
+  var myTableArray = [];
 
-    $('#recipe_table tr').has('td').each(function() {
-        $('td', $(this)).each(function(index, item) {
-            arrayitem = $(item).find('input').val()//.html();
-            myTableArray.push(arrayitem)
-        });
-    });
-
-    //Given array, make request
-    var queryString = myTableArray.join();
-
-    ulr_str = "/recipes" + "?recipe=" + queryString 
-    console.log(ulr_str)
-    make_request(ulr_str,createTable);
-};
-</script>
-
-<script type="text/javascript">
-//Generates grocery list from selections
-function createItemList(){
-    var myTableArray = [];
-
-    $('#item_table tr').has('td').each(function() {
-        $('td', $(this)).each(function(index, item) {
-            arrayitem = $(item).find('input').val()//.html();
-            myTableArray.push(arrayitem)
-        });
-    });
-
-    //Given array, make request
-    var queryString = myTableArray.join();
-
-    ulr_str = "/items" + "?item=" + queryString 
-    console.log(ulr_str)
-    make_request(ulr_str,createTableItem);
-};
-</script>
-
-<script type="text/javascript">
-//Builds the table containing the grocery list
-function createTable(tableData) {
-  tableData = tableData['data']
-  //Converting to multidimensional array
-  var outputData = [];
-
-  for(var i = 0; i < tableData.length; i++) {
-      var input = tableData[i];
-
-      outputData.push([input.Food_Name, input.Food_Units,input.Food_Units_Name,input.Food_Alt_Units,input.Food_Alt_Name]);
-  }
-  tableData = outputData
-  //Old form happened here
-  console.log(tableData)
-  var table = document.getElementById('grocery_table')
-
-  var tableBody = document.createElement('tbody');
-
-  tableData.forEach(function(rowData) {
-    var row = document.createElement('tr');
-
-    rowData.forEach(function(cellData) {
-      var cell = document.createElement('td');
-      var text = document.createElement('input')
-      text.setAttribute('type', 'text')
-      text.value = cellData
-      cell.appendChild(text);
-      row.appendChild(cell);
-    });
-
-    tableBody.appendChild(row);
+  $(tablestring).has('td').each(function() {
+      $('td', $(this)).each(function(index, item) {
+          arrayitem = $(item).find('input').val()//.html();
+          myTableArray.push(arrayitem)
+      });
   });
 
+  //Given array, make request
+  var queryString = myTableArray.join();
+  ulr_str = urlbase + queryString 
+  make_request(ulr_str,requestfunc);
+};
+</script>
+
+<script type="text/javascript">
+function createTable(tableData) {
+  //Converts JSON to multidimensional araray
+  tableData = tableData['data']
+  var outputData = [];
+  for(var i = 0; i < tableData.length; i++) {
+      var input = tableData[i];
+      outputData.push([input.Food_Name, input.Food_Name,input.Food_Units_Name,input.Food_Alt_Units,input.Food_Alt_Name]);
+  }
+  //Adds data to table
+  var table = document.getElementById('grocery_table')
+
+  var tableBody = load_table(outputData)
   table.appendChild(tableBody);
 };
 </script>
 
 <script type="text/javascript">
-//Builds the table containing the grocery list
 function createTableItem(tableData) {
+  //Converts JSON to multidimensional araray
   tableData = tableData['data']
-  //Converting to multidimensional array
   var outputData = [];
-
   for(var i = 0; i < tableData.length; i++) {
       var input = tableData[i];
-
-      outputData.push([input.Food_Name,input.Num_Purchase_Unit,input.Name_Purchase_Unit,input.Price_Purchase_Unit,input.Num_Cooking_Unit,input.Name_Cooking_Unit]);
+      outputData.push([input.Food_Name, "",input.Name_Cooking_Unit,"",""]);
   }
-  tableData = outputData
-  //Old form happened here
-  console.log(tableData)
-
+  //Adds data to table
   var table = document.getElementById('grocery_table')
 
-  var tableBody = document.createElement('tbody');
+  var tableBody = load_table(outputData)
+  table.appendChild(tableBody);
+};
+</script>
 
-  tableData.forEach(function(rowData) {
-    var row = document.createElement('tr');
+<script type="text/javascript">
+function createTableList(tableData) {
+  //Converts JSON to multidimensional araray
+  tableData = tableData['data']
+  var outputData = [];
+  for(var i = 0; i < tableData.length; i++) {
+      var input = tableData[i];
+      outputData.push([input.Food_Name, input.Num_Cooking_Unit,input.Name_Cooking_Unit,input.Food_Alt_Units,input.Food_Alt_Name]);
+  }
+  //Adds data to table
+  var table = document.getElementById('grocery_table')
 
-    var i = 0
-    while (i < 5) {
-      var cell = document.createElement('td');
-      var text = document.createElement('input');
-      text.setAttribute('type', 'text')
-      text.setAttribute('id',"cell" + i.toString()); //This is new
-      if (i ==0){
-        text.value = rowData[0]
-      }
-      if (i == 2) {
-        text.value = rowData[5]
-      }
-      cell.appendChild(text)
-      row.appendChild(cell)
-      i++;
-    }
-
-    tableBody.appendChild(row);
-  });
-
+  var tableBody = load_table(outputData)
   table.appendChild(tableBody);
 };
 </script>
@@ -305,6 +213,12 @@ function post_request(){
 </script>
 
 <script type="text/javascript">
+function pullList() {
+  make_request("/lists", createTableList);
+}
+</script>
+
+<script type="text/javascript">
 function sortTable() {
   //Using code from link below. 
   //https://www.w3schools.com/howto/howto_js_sort_table.asp
@@ -340,11 +254,5 @@ function sortTable() {
       switching = true;
     }
   }
-}
-</script>
-
-<script type="text/javascript">
-function pullList() {
-  make_request("/lists", createTable);
-}
+};
 </script>

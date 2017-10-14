@@ -9,39 +9,14 @@
 <script>
 //Making Get request to get list of items
 function load_data(data){
-  var f = document.createElement("form");
-  var g = document.createElement("select");
-  g.setAttribute('id',"item_list");
-  f.appendChild(g)
-  f.setAttribute('onchange', "return fill_selection()");
-  var def = document.createElement("option");
-  def.value = "Please Select an Item";
-  def.textContent = "Please Select an Item";
-  var other = document.createElement("option");
-  other.value = "New Item";
-  other.textContent = "New Item";
-  g.appendChild(def)
-  g.appendChild(other)
-
+  var g = document.getElementById("item_list")
   data = data['data']
-  //Converting to multidimensional array
-  var outputData = [];
-
-  for(var i = 0; i < data.length; i++) {
-      var input = data[i];
-
-      outputData.push([input.Food_Name]);
-  }
-  data = outputData
-  //Old form happened here
   for (var x in data) {
       var i = document.createElement("option"); //input element, text
-      i.textContent = data[x];
-      i.value = data[x]
+      i.textContent = data[x]['Food_Name'];
+      i.value = data[x]['Food_Name']
       g.appendChild(i);
   }
-
-  document.getElementsByTagName('body')[0].appendChild(f);
 };
 
 //Makes the call to GET item data
@@ -93,6 +68,12 @@ function process_request(data){
   <input type="submit" value="Submit">
 </form>
 
+<form onchange="return fill_selection()">
+  <select id="item_list">
+    <option value="Please Select an Item">Please Select an Item</option>
+    <option value="New Item">New Item</option>
+  </select>
+</form>
 <script type="text/javascript">
 
 function post_request(){

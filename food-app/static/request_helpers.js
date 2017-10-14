@@ -53,3 +53,42 @@ function post_request(url, data){
 
   xhr.send(data);
 };
+
+function load_table(tableData){
+  var tableBody = document.createElement('tbody');
+
+  tableData.forEach(function(rowData) {
+    var row = document.createElement('tr');
+
+    rowData.forEach(function(cellData) {
+      var cell = document.createElement('td');
+      var text = document.createElement('input')
+      text.setAttribute('type', 'text')
+      text.value = cellData
+      cell.appendChild(text);
+      row.appendChild(cell);
+    });
+
+    tableBody.appendChild(row);
+  });
+  return tableBody;
+};
+
+function array_convert(data){
+  data = data['data']
+  //This part converts JSON object to multidimensional array
+  var outputData = [];
+
+  for(var i = 0; i < data.length; i++) {
+    var input = data[i];
+    outputData.push([input.Recipe_Name]);
+  }
+  data = outputData
+  //Adds elements of arrary to items
+  var datalist = document.getElementById('items');
+  data.forEach(function(item) {
+    var option = document.createElement('option');
+    option.value = item;
+    datalist.appendChild(option);
+    });
+};

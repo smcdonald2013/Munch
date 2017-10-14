@@ -9,38 +9,14 @@
 <script>
 //Makes the get request that pulls list of recipes
 function load_data(data){
+  var g = document.getElementById("item_list")
   data = data['data']
-  var r = document.getElementById('recipe_form');
-  r.setAttribute('onsubmit', "return post_request()");
-
-  var new_hidden = document.createElement('input');
-  new_hidden.setAttribute('type', 'hidden');
-  new_hidden.setAttribute('id', 'hidden_input');
-  hidden_spot = document.getElementById('hidden');
-  hidden_spot.appendChild(new_hidden)
-
-  var f = document.createElement("form");
-  var g = document.createElement("select");
-  g.setAttribute('id',"item_list");
-  f.appendChild(g)
-  f.setAttribute('onchange', "return fill_selection()");
-  var def = document.createElement("option");
-  def.value = "Please Select a Recipe";
-  def.textContent = "Please Select a Recipe";
-  var other = document.createElement("option");
-  other.value = "New Recipe";
-  other.textContent = "New Recipe";
-  g.appendChild(def)
-  g.appendChild(other)
-
   for (var x in data) {
       var i = document.createElement("option"); //input element, text
       i.textContent = data[x]['Recipe_Name'];
       i.value = data[x]['Recipe_Name']
       g.appendChild(i);
   }
-
-  document.getElementById('list').appendChild(f);
 };
 
 //Fills recipe selected (calls create table)
@@ -58,7 +34,6 @@ function fill_selection(){
   else {
     hidden.type = 'hidden';
     ulr_str = "/recipes?recipe=" + selection
-    console.log(document.getElementById('item_list'))
     make_request(ulr_str,createTable);
   }
 };
@@ -69,44 +44,24 @@ function fill_selection(){
 <script>
 //Builds the table containing the recipe
 function createTable(tableData) {
+  //Converts JSON to multidimensional araray
   tableData = tableData['data']
-  //Converting to multidimensional array
   var outputData = [];
-
   for(var i = 0; i < tableData.length; i++) {
       var input = tableData[i];
-
       outputData.push([input.Food_Name, input.Food_Units,input.Food_Units_Name,input.Food_Alt_Units,input.Food_Alt_Name]);
   }
-  tableData = outputData
-  //Old form happened here
+  //Adds data to table
   var table = document.getElementById('recipe_table')
   while(table.rows.length > 1) {
   table.deleteRow(-1);
   }
-  var tableBody = document.createElement('tbody');
-
-  tableData.forEach(function(rowData) {
-    var row = document.createElement('tr');
-
-    rowData.forEach(function(cellData) {
-      var cell = document.createElement('td');
-      var text = document.createElement('input')
-      text.setAttribute('type', 'text')
-      text.value = cellData
-      cell.appendChild(text);
-      row.appendChild(cell);
-    });
-
-    tableBody.appendChild(row);
-  });
-
+  var tableBody = load_table(outputData)
   table.appendChild(tableBody);
 };
 </script>
 
 <script type="text/javascript">
-
 //Called when button clicked, will create the item list if it doesn't exist, else just adds a row. 
 function addRow(){
   var table = document.getElementById('recipe_table');
@@ -114,14 +69,13 @@ function addRow(){
 
   var exist = document.getElementById('item')
   if (exist == null) {
-      item_list();
+      make_request("/items",fill_data);
       var row = table.insertRow(-1);
   }
   else { var row = table.insertRow(n_rows-1);}
 
-
   var i = 0
-  while (i < 5) {
+  while (i < table.rows[0].cells.length) {
     var cell = document.createElement('td');
     var text = document.createElement('input');
     text.setAttribute('type', 'text')
@@ -132,25 +86,8 @@ function addRow(){
   }
 };
 
-//Gets the list of food items. 
-function item_list(){
-  ulr_str = "/items"
-  make_request(ulr_str,fill_data)
-};
-
 //Fills the list of food items. 
 function fill_data(data){
-  data = data['data']
-  //Converting to multidimensional array
-  var outputData = [];
-
-  for(var i = 0; i < data.length; i++) {
-      var input = data[i];
-
-      outputData.push([input.Food_Name]);
-  }
-  data = outputData
-  //Old form happened here
   var table = document.getElementById('recipe_table');
   var n_rows = table.rows.length;
   var row = table.insertRow(n_rows);
@@ -168,35 +105,29 @@ function fill_data(data){
   def.textContent = "Please Select an Item";
   g.appendChild(def)
 
+  data = data['data']
   for (var x in data) {
     var i = document.createElement("option"); //input element, text
-    i.textContent = data[x]
-    i.value = data[x]
+    i.textContent = data[x]['Food_Name']
+    i.value = data[x]['Food_Name']
     g.appendChild(i)
   }
 };
 
-//Fills the food item details when the item is selected
 function fill_item(){
   selection = document.getElementById('item').value
   ulr_str = "/items?item=" + selection
-  console.log(ulr_str)
-  var xhr = createCORSRequest('GET', ulr_str);
-  xhr.send(null)
+  make_request(ulr_str,fillz);
+};
 
-  xhr.onload = function() {
-   var responseText = xhr.responseText;
-   console.log(responseText);
-   var parse = JSON.parse(responseText);
-   var data = parse['data'][0]
-   console.log(data)
-   //var split = parse[0];
-   var dta = document.getElementsByTagName('tr');
-   n_rows = dta.length;
-   var inp = dta[n_rows-2].getElementsByTagName('input');
-   inp[0].value = data['Food_Name'];
-   inp[2].value = data['Name_Cooking_Unit'];
-  };
+//Fills the food item details when the item is selected
+function fillz(data){
+  var data = data['data'][0]
+  var dta = document.getElementsByTagName('tr');
+  n_rows = dta.length;
+  var inp = dta[n_rows-2].getElementsByTagName('input');
+  inp[0].value = data['Food_Name'];
+  inp[2].value = data['Name_Cooking_Unit'];
 };
 </script>
 
@@ -252,10 +183,18 @@ function post_request(){
 </script>
 
 <div id="list">
+<form onchange="return fill_selection()">
+  <select id="item_list">
+    <option value="Please Select a Recipe">Please Select a Recipe</option>
+    <option value="New Recipe">New Recipe</option>
+  </select>
+</form>
+
 </div>
 <div id='hidden'>
+<input type='hidden' id='hidden_input'>
 </div>
-<form id='recipe_form'>
+<form id='recipe_form' onsubmit="return post_request()">
   <table id='recipe_table'>
   <tr>
     <th>Food Name</th>

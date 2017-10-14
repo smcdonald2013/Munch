@@ -161,8 +161,12 @@ def get_list():
     df = df[['Food_Name', 'Num_Cooking_Unit', 'Name_Cooking_Unit']]
     df['Food_Alt_Units'] = ""
     df['Food_Alt_Name'] = ""
-    data_json = df.to_json(orient='values')
-    return data_json
+    #data_json = df.to_json(orient='values')
+    data_json = df.to_json(orient='records')
+    data_dict = json.loads(data_json)
+    data_dict_final = {'data': data_dict}
+    data_final_json = json.dumps(data_dict_final)
+    return data_final_json
 
 @application.route('/lists', methods=['POST'])
 def create_list():
