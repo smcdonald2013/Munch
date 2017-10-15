@@ -23,9 +23,9 @@
 
 .heading h2 {
     margin: 1em 0 0.5em 0;
-    color: #343434;
+    color: blue;
     font-weight: normal;
-    font-family: 'Ultra', sans-serif;   
+    font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
     font-size: 12px;
     line-height: 16px;
     text-transform: uppercase;
@@ -54,12 +54,12 @@
     background-color: #008CBA; /* Green */
     border: none;
     color: white;
-    padding: 15px 32px;
+    padding: 12px 28px;
     text-align: center;
     text-decoration: none;
     display: inline-block;
-    font-size: 14px;
-    border-radius: 8px;
+    font-size: 12px;
+    border-radius: 6px;
     -webkit-transition-duration: 0.4s; /* Safari */
     transition-duration: 0.4s;
     border: 2px solid #008CBA;
@@ -69,4 +69,11 @@
     /* background-color: white; 
     color: black; */
     box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
+}
+
+input[type=email] {
+    padding:5px; 
+    border:2px solid #ccc; 
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
 }

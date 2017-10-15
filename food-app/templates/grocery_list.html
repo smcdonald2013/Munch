@@ -60,7 +60,7 @@ function addToList(tableid, listid){
 <div id="RecipeSelection">
 <datalist id="recipes"></datalist>
 
-<h2 class="heading">Please Select your Recipes</h2>
+<h2 class="heading">Select Recipes</h2>
 <input id="recipelist" type="email" list="recipes" multiple>
 <input id="clickMe" type="button" value="Add Recipe" class="btn" onclick="addToList('recipe_table', 'recipelist');" />
 
@@ -70,7 +70,6 @@ function addToList(tableid, listid){
   <tbody>
   </tbody>
   </table>
-  <!--<input id="clickMe" type="button" value="Create Shopping List" onclick="createRecipeList();" />-->
   <input id="clickMe" type="button" value="Create Shopping List" onclick="createList('#recipe_table tr', '/recipes?recipe=', createTable);" />
   <br/>
 </form>
@@ -79,7 +78,7 @@ function addToList(tableid, listid){
 <div id="ItemSelection">
 <datalist id="items"></datalist>
 
-<h2 class="heading">Add Additional Items</h2>
+<h2 class="heading">Additional Items</h2>
 <input id="itemlist" type="email" list="items" multiple>
 <input id="clickMe" type="button" value="Add Item" class="btn" onclick="addToList('item_table', 'itemlist');" />
 
