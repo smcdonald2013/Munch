@@ -1,7 +1,7 @@
 #grocery_table {
     font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
     border-collapse: collapse;
-    width: 50%;
+    width: 80%;
 }
 
 #grocery_table td, #grocery_table th {
@@ -44,10 +44,15 @@
 
 #ShoppingList {
     padding: 8px;
+    display:inline-block;
 }
 
 #Selections {
     float: left;
+}
+
+#ListButtons {
+    display:inline-block;
 }
 
 .btn {
