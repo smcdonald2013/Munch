@@ -65,6 +65,7 @@ function load_table(tableData){
       var text = document.createElement('input')
       text.setAttribute('type', 'text')
       text.value = cellData
+      text.innerHTML = cellData
       cell.appendChild(text);
       row.appendChild(cell);
     });

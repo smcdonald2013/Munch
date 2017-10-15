@@ -2,7 +2,7 @@
 <html>
     <head>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-        <link rel="stylesheet" type="text/css" href="mystyle.css"></head>
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}" />
     </head>
 <body>
 <script src="static/request_helpers.js" type="text/javascript"></script>
@@ -12,7 +12,7 @@
 function load_recipes(data){
   var g = document.getElementById('recipes');
   data = data['data']
-  
+
   for (var x in data) {
     var i = document.createElement("option"); //input element, text
     i.textContent = data[x]['Recipe_Name'];
@@ -56,14 +56,15 @@ function addToList(tableid, listid){
 };
 </script>
 
+<div id="Selections">
+<div id="RecipeSelection">
 <datalist id="recipes"></datalist>
 
-<P>Please Select your Recipes</P>
+<h2 class="heading">Please Select your Recipes</h2>
 <input id="recipelist" type="email" list="recipes" multiple>
-<!--<input id="clickMe" type="button" value="Add Recipe" onclick="addRecipe();" />-->
-<input id="clickMe" type="button" value="Add Recipe" onclick="addToList('recipe_table', 'recipelist');" />
+<input id="clickMe" type="button" value="Add Recipe" class="btn" onclick="addToList('recipe_table', 'recipelist');" />
 
-<p>Recipes Selected</p>
+<h2>Recipes Selected</h2>
 <form id='recipe_form'>
   <table id='recipe_table'>
   <tbody>
@@ -73,26 +74,29 @@ function addToList(tableid, listid){
   <input id="clickMe" type="button" value="Create Shopping List" onclick="createList('#recipe_table tr', '/recipes?recipe=', createTable);" />
   <br/>
 </form>
+</div>
 
+<div id="ItemSelection">
 <datalist id="items"></datalist>
 
-<P>Add Additional Items</P>
+<h2 class="heading">Add Additional Items</h2>
 <input id="itemlist" type="email" list="items" multiple>
-<!--<input id="clickMe" type="button" value="Add Item" onclick="addItem();" />-->
-<input id="clickMe" type="button" value="Add Item" onclick="addToList('item_table', 'itemlist');" />
+<input id="clickMe" type="button" value="Add Item" class="btn" onclick="addToList('item_table', 'itemlist');" />
 
-<p>Items Selected</p>
+<h2>Items Selected</h2>
 <form id='item_form'>
   <table id='item_table'>
   <tbody>
   </tbody>
   </table>
-  <!--<input id="clickMe" type="button" value="Create Shopping List" onclick="createItemList();" />-->
   <input id="clickMe" type="button" value="Create Shopping List" onclick="createList('#item_table tr', '/items?item=', createTableItem);" />
   <br/>
 </form>
+</div>
+</div>
 
-<p>Shopping List</p>
+<div id="ShoppingList">
+<h2 class="heading">Shopping List</h2>
 <form id='grocery_form' onsubmit="return post_request()">
   <table id='grocery_table'>
   <tr>
@@ -108,6 +112,7 @@ function addToList(tableid, listid){
 </form>
 <input id="clickMe" type="button" value="Sort Grocery List" onclick="sortTable();" />
 <input id="clickMe" type="button" value="Pull List" onclick="pullList();" />
+</div>
 
 <script type="text/javascript">
 //Generates grocery list from selections
@@ -132,10 +137,11 @@ function createList(tablestring, urlbase, requestfunc){
 function createTable(tableData) {
   //Converts JSON to multidimensional araray
   tableData = tableData['data']
+  console.log(tableData)
   var outputData = [];
   for(var i = 0; i < tableData.length; i++) {
       var input = tableData[i];
-      outputData.push([input.Food_Name, input.Food_Name,input.Food_Units_Name,input.Food_Alt_Units,input.Food_Alt_Name]);
+      outputData.push([input.Food_Name, input.Food_Units,input.Food_Units_Name,input.Food_Alt_Units,input.Food_Alt_Name]);
   }
   //Adds data to table
   var table = document.getElementById('grocery_table')
@@ -159,6 +165,7 @@ function createTableItem(tableData) {
 
   var tableBody = load_table(outputData)
   table.appendChild(tableBody);
+  sortTable();
 };
 </script>
 
@@ -176,6 +183,7 @@ function createTableList(tableData) {
 
   var tableBody = load_table(outputData)
   table.appendChild(tableBody);
+  sortTable();
 };
 </script>
 
@@ -238,8 +246,8 @@ function sortTable() {
       shouldSwitch = false;
       /*Get the two elements you want to compare,
       one from current row and one from the next:*/
-      x = rows[i].getElementsByTagName("TD")[0];
-      y = rows[i + 1].getElementsByTagName("TD")[0];
+      x = rows[i].getElementsByTagName("input")[0];
+      y = rows[i + 1].getElementsByTagName("input")[0];
       //check if the two rows should switch place:
       if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
         //if so, mark as a switch and break the loop:
@@ -254,5 +262,5 @@ function sortTable() {
       switching = true;
     }
   }
-};
+}
 </script>

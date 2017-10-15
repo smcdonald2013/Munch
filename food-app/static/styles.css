@@ -1,0 +1,72 @@
+#grocery_table {
+    font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+    border-collapse: collapse;
+    width: 50%;
+}
+
+#grocery_table td, #grocery_table th {
+    border: 1px solid #ddd;
+    padding: 6px;
+}
+
+#grocery_table tr:nth-child(even){background-color: #f2f2f2;}
+
+#grocery_table tr:hover {background-color: #ddd;}
+
+#grocery_table th {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    text-align: left;
+    background-color: #4CAF50;
+    color: white;
+}
+
+.heading h2 {
+    margin: 1em 0 0.5em 0;
+    color: #343434;
+    font-weight: normal;
+    font-family: 'Ultra', sans-serif;   
+    font-size: 12px;
+    line-height: 16px;
+    text-transform: uppercase;
+    text-shadow: 0 2px white, 0 3px #777;
+}
+
+#ItemSelection {
+    float: right;
+    padding: 8px;
+}
+
+#RecipeSelection {
+    float: left;
+    padding: 8px;
+}
+
+#ShoppingList {
+    padding: 8px;
+}
+
+#Selections {
+    float: left;
+}
+
+.btn {
+    background-color: #008CBA; /* Green */
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 14px;
+    border-radius: 8px;
+    -webkit-transition-duration: 0.4s; /* Safari */
+    transition-duration: 0.4s;
+    border: 2px solid #008CBA;
+}
+
+.btn:hover {
+    /* background-color: white; 
+    color: black; */
+    box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
+}
