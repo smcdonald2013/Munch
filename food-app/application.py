@@ -43,8 +43,8 @@ def recipe_lookup(recipe=None):
 def list_lookup():
     engine = sqlalchemy.create_engine(SQLALCHEMY_DATABASE_URI)
     sql_string =  ("SELECT * " 
-                    "FROM ListsNew as l "
-                    "WHERE DATE_ID = (SELECT MAX(DATE_ID) as latest_date FROM ListsNew sub)")
+                    "FROM Lists as l "
+                    "WHERE DATE_ID = (SELECT MAX(DATE_ID) as latest_date FROM Lists sub)")
     df = pd.read_sql_query(sql_string, engine)
     return df
 
@@ -184,8 +184,8 @@ def create_list():
     data_df['Date_ID'] = datetime.datetime.now()
     data_df = data_df[['Date_ID','Food_Name', 'Num_Cooking_Unit', 'Name_Cooking_Unit']]
     application.logger.debug(data_df)
-    #sql_insert(data_df, table='Lists')
-    sql_insert(data_df, table='ListsNew')
+    sql_insert(data_df, table='Lists')
+    #sql_insert(data_df, table='ListsNew')
     return data_df.to_json(orient='values')
 
 ###Helper functions
