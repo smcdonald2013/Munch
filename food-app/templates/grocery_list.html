@@ -132,6 +132,34 @@ function createTable(tableData) {
 
   var tableBody = load_table(outputData)
   table.appendChild(tableBody);
+  console.log('Table')
+  appendColumn();
+};
+</script>
+
+<script type="text/javascript">
+// append column to the HTML table
+function appendColumn() {
+    var tbl = document.getElementById('grocery_table') // table reference
+    // open loop for each row and append cell
+    for (var i = 1; i < tbl.rows.length; i++) {
+        //createCell(tbl.rows[i].insertCell(tbl.rows[i].cells.length), i, 'col');
+        var cellnum = tbl.rows[i].cells.length
+        var delcell = document.createElement('td');
+        var deltext = document.createElement('input');
+        deltext.setAttribute('type', 'button');
+        deltext.setAttribute('value', 'Delete');
+        deltext.setAttribute('onclick', "SomeDeleteRowFunction(this)")
+        delcell.appendChild(deltext);
+        tbl.rows[i].appendChild(delcell);
+        //input type="button" value="Delete Row" onclick="SomeDeleteRowFunction(this)"
+    }
+};
+
+function SomeDeleteRowFunction(o) {
+     //no clue what to put here?
+     var p=o.parentNode.parentNode;
+         p.parentNode.removeChild(p);
 };
 </script>
 
