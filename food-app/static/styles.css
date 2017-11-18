@@ -1,12 +1,63 @@
+.btn {
+    background-color: #008CBA; /* Green */
+    border: none;
+    color: white;
+    padding: 16px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    border-radius: 6px;
+    -webkit-transition-duration: 0.4s; /* Safari */
+    transition-duration: 0.4s;
+    border: 2px solid #008CBA;
+}
+
+.btn:hover {
+    /* background-color: white; 
+    color: black; */
+    box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
+}
+
+.disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.btn_small {
+    background-color: #008CBA; /* Green */
+    border: none;
+    color: white;
+    padding: 12px 24px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 14px;
+    border-radius: 4px;
+    -webkit-transition-duration: 0.4s; /* Safari */
+    transition-duration: 0.4s;
+    border: 2px solid #008CBA;
+}
+
+.btn_small:hover {
+    box-shadow: 0 9px 12px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
+}
+
 #grocery_table {
     font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
-    border-collapse: collapse;
+    border-collapse: separate;
     width: 40%;
+    table-layout: auto;
+    border-spacing: 0px;
+    margin: 0px;
+    display: block;
+    vertical-align: bottom;
 }
 
 #grocery_table td, #grocery_table th {
     border: 1px solid #ddd;
-    padding: 6px;
+    padding: 3px;
+    margin: 0px;
 }
 
 #grocery_table tr:nth-child(even){background-color: #f2f2f2;}
@@ -14,10 +65,11 @@
 #grocery_table tr:hover {background-color: #ddd;}
 
 #grocery_table th {
-    padding-top: 12px;
-    padding-bottom: 12px;
+    padding-top: 8px;
+    padding-bottom: 8px;
     text-align: left;
-    background-color: #4CAF50;
+    background-color: #008CBA; 
+    border-radius: 6px;
     color: white;
 }
 
@@ -90,8 +142,8 @@
 
 #ShoppingList {
     margin: auto;
-    width: 65%;
-    padding: 8px;
+    width: 45%;
+    padding: 2px;
     display: none;
 }
 
@@ -99,35 +151,13 @@
     display:inline-block;
 }
 
+#SubmitButton {
+    text-align:center;
+}
+
 #PullOrNew {
     margin: auto;
     width: 48%;
-}
-
-.btn {
-    background-color: #008CBA; /* Green */
-    border: none;
-    color: white;
-    padding: 16px 32px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 16px;
-    border-radius: 6px;
-    -webkit-transition-duration: 0.4s; /* Safari */
-    transition-duration: 0.4s;
-    border: 2px solid #008CBA;
-}
-
-.btn:hover {
-    /* background-color: white; 
-    color: black; */
-    box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
-}
-
-.disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
 }
 
 input[type=email] {
@@ -142,4 +172,16 @@ input[type=email] {
     width: 50%;
     padding: 10px;
     /*border: 3px solid green;*/
+}
+
+input[type=text] {
+    padding: 0px; 
+    border: 0px;
+    background-color: transparent;
+}
+
+select {
+    padding: 0px; 
+    border: 0px;
+    background-color: transparent;
 }

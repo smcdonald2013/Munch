@@ -78,6 +78,7 @@ function addToList(tableid, listid){
 
   <div id="ShoppingList">
   <h2 class="heading">Shopping List</h2>
+  <div id="GroceryTable">
   <form id='grocery_form' onsubmit="return post_request()">
     <table id='grocery_table'>
     <tr>
@@ -86,16 +87,20 @@ function addToList(tableid, listid){
       <th>Food Units Name</th>
     </tr>
     </table>
-    <input type="submit" value="Submit">
     <br/>
   </form>
-    <div id="ListButtons">
-    <input id="clickMe" type="button" value="Add Row" onclick="addRow();" />
-    <input id="clickMe" type="button" value="Sort Grocery List" onclick="sortTable();" />
-    <!--<input id="clickMe" type="button" value="Pull List" onclick="pullList();" />-->
-    </div>
+  </div>
+  <div id="ListButtons">
+  <input id="clickMe" type="button" class="btn_small" value="Add Row" onclick="addRow();" />
+  <!--<input id="clickMe" type="button" value="Sort Grocery List" onclick="sortTable();" />-->
+  </div>
+  <div id='SubmitButton'>
+      <input form ="grocery_form" class="btn" type="submit" value="Submit" />
+  </div>
   </div>
 </div>
+
+
 
 <script type="text/javascript">
 //Generates grocery list from selections
@@ -148,7 +153,7 @@ function appendColumn() {
         var delcell = document.createElement('td');
         var deltext = document.createElement('input');
         deltext.setAttribute('type', 'button');
-        deltext.setAttribute('value', 'Delete');
+        deltext.setAttribute('value', 'X');
         deltext.setAttribute('onclick', "SomeDeleteRowFunction(this)")
         delcell.appendChild(deltext);
         tbl.rows[i].appendChild(delcell);
@@ -292,10 +297,18 @@ function addRow(){
     var text = document.createElement('input');
     text.setAttribute('type', 'text')
     text.setAttribute('id',"cell" + i.toString()); //This is new
+    text.setAttribute('size', 2);
     cell.appendChild(text)
     row.appendChild(cell)
     i++;
   }
+  var delcell = document.createElement('td');
+  var deltext = document.createElement('input');
+  deltext.setAttribute('type', 'button');
+  deltext.setAttribute('value', 'X');
+  deltext.setAttribute('onclick', "SomeDeleteRowFunction(this)")
+  delcell.appendChild(deltext);
+  row.appendChild(delcell);
 };
 
 //Fills the list of food items. 
@@ -339,7 +352,9 @@ function fillz(data){
   n_rows = dta.length;
   var inp = dta[n_rows-2].getElementsByTagName('input');
   inp[0].value = data['Food_Name'];
+  inp[0].setAttribute('size', data['Food_Name'].length+2);
   inp[2].value = data['Name_Cooking_Unit'];
+  inp[2].setAttribute('size', data['Name_Cooking_Unit'].length+2);
 };
 </script>
 
