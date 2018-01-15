@@ -74,6 +74,10 @@ def grocery_list():
 def edit_list():
     return render_template('edit_list.html')
 
+@application.route("/outline", methods=['GET'])
+def outline():
+    return render_template('outline.html')
+
 ###Rest API Endpoints (Return JSON)
 #Item Endpoints
 @application.route("/items", methods=['GET'])

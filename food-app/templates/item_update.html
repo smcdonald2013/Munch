@@ -1,106 +1,53 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-    </head>
-<body>
+{% extends "base.html" %}
+{% block body %}
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}" />
 <script src="static/request_helpers.js" type="text/javascript"></script>
-
-<script>
-//Making Get request to get list of items
-function load_data(data){
-  var g = document.getElementById("item_list")
-  data = data['data']
-  for (var x in data) {
-      var i = document.createElement("option"); //input element, text
-      i.textContent = data[x]['Food_Name'];
-      i.value = data[x]['Food_Name']
-      g.appendChild(i);
-  }
-};
-
-//Makes the call to GET item data
-function fill_selection(){
-  //Now we set parameters for GET request that fills selected item's data 
-  selection = document.getElementById('item_list').value
-  if (selection != "New Item"){
-    ulr_str = "/items?item=" + selection
-    make_request(ulr_str,process_request);
-  }
-  else {
-    document.getElementById('Name').value = "";
-    document.getElementById('NumPU').value = "";
-    document.getElementById('NamePU').value = "";
-    document.getElementById('PPU').value = "";
-    document.getElementById('NumCU').value = "";
-    document.getElementById('NameCU').value = "";
-  }
-};
-
-//Fills the fields with request data
-function process_request(data){
-  var data = data['data'][0]
-  console.log(data)
-  document.getElementById('Name').value = data['Food_Name'];
-  document.getElementById('NumPU').value = data['Num_Purchase_Unit'];
-  document.getElementById('NamePU').value = data['Name_Purchase_Unit'];
-  document.getElementById('PPU').value = data['Price_Purchase_Unit'];
-  document.getElementById('NumCU').value = data['Num_Cooking_Unit'];
-  document.getElementById('NameCU').value = data['Name_Cooking_Unit'];
-};
-</script>
-
+<script src="static/item_funcs.js" type="text/javascript"></script>
 <script>window.onload = make_request("/items", load_data);</script>
 
-<form id="item_form" onsubmit="return post_request()">
-  Food_Name:<br>
-  <input type="text" name="Food_Name", id='Name'><br>
-  Num_Purchase_Unit:<br>
-  <input type="text" name="Num_Purchase_Unit", id="NumPU"><br>
-  Name_Purchase_Unit:<br>
-  <input type="text" name="Name_Purchase_Unit", id='NamePU'><br>
-  Price_Purchase_Unit:<br>
-  <input type="text" name="Price_Purchase_Unit", id='PPU'><br>
-  Num_Cooking_Unit:<br>
-  <input type="text" name="Num_Cooking_Unit", id='NumCU'><br>
-  Name_Cooking_Unit:<br>
-  <input type="text" name="Name_Cooking_Unit", id='NameCU'><br>
-  <input type="submit" value="Submit">
-</form>
+<div class='content'>
 
-<form onchange="return fill_selection()">
-  <select id="item_list">
-    <option value="Please Select an Item">Please Select an Item</option>
-    <option value="New Item">New Item</option>
-  </select>
-</form>
-<script type="text/javascript">
+  <div class='content'>
+  <form onchange="return fill_selection()">
+    <select id="item_list">
+      <option value="Please Select an Item">Please Select an Item</option>
+      <option value="New Item">New Item</option>
+    </select>
+  </form>
+  </div>
 
-function post_request(){
-  var request = {};
-  request.Food_Name = document.getElementById('Name').value
-  request.Num_Purchase_Unit = document.getElementById('NumPU').value
-  request.Name_Purchase_Unit = document.getElementById('NamePU').value
-  request.Price_Purchase_Unit = document.getElementById('PPU').value
-  request.Num_Cooking_Unit = document.getElementById('NumCU').value
-  request.Name_Cooking_Unit = document.getElementById('NameCU').value
+  <form id='item_form' onsubmit="return post_item_request()">
+    <table id='item_table'>
+      <tbody>
+          <tr>
+            <td>Food Name</td>          
+            <td><input type="text" name="Food_Name" size="20" id='Name'></td>
+          </tr>
+          <tr>
+            <td>Purchase Units</td>
+            <td><input type="text" name="Num_Purchase_Unit" size="20" id='NumPU'></td>
+          </tr>
+          <tr>
+            <td>Name of Purchase Units</td>
+            <td><input type="text" name="Name_Purchase_Unit" size="20" id='NamePU'></td>
+          </tr>
+          <tr>
+            <td>Price of Purchase Units</td>
+            <td><input type="text" name="Price_Purchase_Unit" size="20" id='PPU'></td>
+          </tr>
+          <tr>
+            <td>Number of Cooking Units</td>
+            <td><input type="text" name="Num_Cooking_Unit" size="20" id='NumCU'></td>
+          </tr>
+            <td>Name of Cooking Units</td>
+            <td><input type="text" name="Name_Cooking_Unit" size="20" id='NameCU'></td>
+          </tr>
+      </tbody>
+    </table>
+  </form>
 
-  url = "/items"
-  var xhr = createCORSRequest('POST', url);
-  if (!xhr) {
-    throw new Error('CORS not supported');
-  }
-
-  xhr.setRequestHeader("Content-type", "application/json");
-
-  xhr.onerror = function() {console.log('There was an error!');};
-
-  var data = JSON.stringify(request);
-  console.log(data)
-  xhr.send(data);
-  return false;
-};
-</script>
-
-</body>
-</html>
+  <div class="content">
+    <input form ="item_form" type="submit" class="btn_small" value="Submit">
+  </div>
+</div>
+{% endblock %}

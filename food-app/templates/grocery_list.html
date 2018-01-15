@@ -1,369 +1,74 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}" />
-    </head>
-<body>
+{% extends "base.html" %}
+{% block body %}
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}" />
 <script src="static/request_helpers.js" type="text/javascript"></script>
-
-<script>
-//Makes the get request that pulls list of recipes
-function load_recipes(data){
-  var g = document.getElementById('recipes');
-  data = data['data']
-
-  for (var x in data) {
-    var i = document.createElement("option"); //input element, text
-    i.textContent = data[x]['Recipe_Name'];
-    i.value = data[x]['Recipe_Name']
-    g.appendChild(i);
-  }
-};
-</script>
+<script src="static/list_funcs.js" type="text/javascript"></script>
 
 <script>window.onload = make_request("/recipes", load_recipes);</script>
-<!--<script>window.onload = make_request("/items", load_items);</script>-->
 
-<script type="text/javascript">
-function addToList(tableid, listid){
-  //toggle_visibility('RecipesChoosen') //This should be cleaned up
-  e = document.getElementById('RecipesChoosen')
-  e.style.display = 'block'
-  var table = document.getElementById(tableid);
-  var n_rows = table.rows.length;
-
-  var row = table.insertRow(-1);
-  var cell = document.createElement('td');
-  var text = document.createElement('input');
-  text.setAttribute('type', 'text')
-  var entry = document.getElementById(listid);
-  text.value = entry.value;
-  cell.appendChild(text)
-  row.appendChild(cell)
-};
-</script>
-
-<div id='total' class=center>
-  <div id="PullOrNew">
+<div class=content>
+  <div class=content>
   <input id="pullList" type="button" class="btn" value="Pull Existing List" onclick="pullList();" />
   <input id="newList" type="button" class="btn" value="Create New List" onclick="createFirstList();" />
   </div>
 
-  <!--<div id="RecipeSelection">-->
   <datalist id="recipes"></datalist>
 
-  <div id="AddRecipes">
-  <h2 class="heading">Select Recipes</h2>
-  <div id="AddRecipesButton">
-  <input id="recipelist" type="email" list="recipes" multiple>
-  <input id="clickMe" type="button" value="Add Recipe" class="btn" onclick="addToList('recipe_table', 'recipelist');" />
-  </div>
+  <div id="RecipesGroup" class="hide">
+    <div class=content id="AddRecipes">
+      <h2 class="heading">Select Recipes</h2>
+    </div>
+
+    <div class=content id="AddRecipesButton">
+      <input id="recipelist" type="email" list="recipes" multiple>
+      <input id="clickMe" type="button" value="Add Recipe" class="btn" onclick="addToList('recipe_table', 'recipelist');" />
+    </div>
   </div>
 
-  <div id="RecipesChoosen">
-  <h2 class="heading">Recipes Selected</h2>
-  <div id="RecipesForm">
-  <form id='recipe_form'>
-    <table id='recipe_table'>
-    <tbody>
-    </tbody>
-    </table>
-    <input id="clickMe" type="button" value="Create Shopping List" class="btn" onclick="createList('#recipe_table tr', '/recipes?recipe=', createTable);" />
-    <br/>
-  </form>
-  </div>
-  </div>
-  <!--</div>-->
+  <div id="RecipesChoosen" class="hide">
+    <h2 class="heading">Recipes Selected</h2>
 
-  <div id="ShoppingList">
-  <h2 class="heading">Shopping List</h2>
-  <div id="GroceryTable">
-  <form id='grocery_form' onsubmit="return post_request()">
-    <table id='grocery_table'>
-    <tr>
-      <th>Food Name</th>
-      <th>Food Units</th>
-      <th>Food Units Name</th>
-    </tr>
-    </table>
-    <br/>
-  </form>
+      <div id="RecipesForm" class=content>
+        <form id='recipe_form'>
+          <table id='recipe_table'>
+            <tbody>
+            </tbody>
+          </table>
+        </form>
+      </div>
+
+      <div class=content>
+          <input form ="recipes_form" type="button" value="Create Shopping List" class="btn" onclick="createList('#recipe_table tr', '/recipes?recipe=', createTable);" />
+      </div>
+
   </div>
-  <div id="ListButtons">
-  <input id="clickMe" type="button" class="btn_small" value="Add Row" onclick="addRow();" />
-  <!--<input id="clickMe" type="button" value="Sort Grocery List" onclick="sortTable();" />-->
+
+  <div class=content id="ShoppingList">
+    <h2 class="heading">Shopping List</h2>
+
+      <div id="GroceryTable" class=content>
+        <form id='grocery_form' onsubmit="return post_list_request()">
+          <table id='grocery_table'>
+          <tr>
+            <th>Food Name</th>
+            <th>Food Units</th>
+            <th>Food Units Name</th>
+          </tr>
+          </table>
+          <br/>
+        </form>
+      </div>
+
+      <div id="ListButtons" class=content>
+        <input id="clickMe" type="button" class="btn" value="Add Row" onclick="addRow();" />
+        <!--<input id="clickMe" type="button" value="Sort Grocery List" onclick="sortTable();" />-->
+      </div>
+
+      <div id='SubmitButton'>
+          <input form ="grocery_form" class="btn" type="submit" value="Submit" />
+      </div>
+
   </div>
-  <div id='SubmitButton'>
-      <input form ="grocery_form" class="btn" type="submit" value="Submit" />
-  </div>
-  </div>
+
 </div>
-
-
-
-<script type="text/javascript">
-//Generates grocery list from selections
-function createList(tablestring, urlbase, requestfunc){
-  toggle_visibility('ShoppingList')
-  var myTableArray = [];
-
-  $(tablestring).has('td').each(function() {
-      $('td', $(this)).each(function(index, item) {
-          arrayitem = $(item).find('input').val()//.html();
-          myTableArray.push(arrayitem)
-      });
-  });
-
-  //Given array, make request
-  var queryString = myTableArray.join();
-  ulr_str = urlbase + queryString 
-  make_request(ulr_str,requestfunc);
-};
-</script>
-
-<script type="text/javascript">
-function createTable(tableData) {
-  //Converts JSON to multidimensional araray
-  tableData = tableData['data']
-  console.log(tableData)
-  var outputData = [];
-  for(var i = 0; i < tableData.length; i++) {
-      var input = tableData[i];
-      outputData.push([input.Food_Name, input.Food_Units,input.Food_Units_Name]);
-  }
-  //Adds data to table
-  var table = document.getElementById('grocery_table')
-
-  var tableBody = load_table(outputData)
-  table.appendChild(tableBody);
-  console.log('Table')
-  appendColumn();
-};
-</script>
-
-<script type="text/javascript">
-// append column to the HTML table
-function appendColumn() {
-    var tbl = document.getElementById('grocery_table') // table reference
-    // open loop for each row and append cell
-    for (var i = 1; i < tbl.rows.length; i++) {
-        //createCell(tbl.rows[i].insertCell(tbl.rows[i].cells.length), i, 'col');
-        var cellnum = tbl.rows[i].cells.length
-        var delcell = document.createElement('td');
-        var deltext = document.createElement('input');
-        deltext.setAttribute('type', 'button');
-        deltext.setAttribute('value', 'X');
-        deltext.setAttribute('onclick', "SomeDeleteRowFunction(this)")
-        delcell.appendChild(deltext);
-        tbl.rows[i].appendChild(delcell);
-        //input type="button" value="Delete Row" onclick="SomeDeleteRowFunction(this)"
-    }
-};
-
-function SomeDeleteRowFunction(o) {
-     //no clue what to put here?
-     var p=o.parentNode.parentNode;
-         p.parentNode.removeChild(p);
-};
-</script>
-
-<script type="text/javascript">
-function createTableList(tableData) {
-  //Converts JSON to multidimensional araray
-  tableData = tableData['data']
-  var outputData = [];
-  for(var i = 0; i < tableData.length; i++) {
-      var input = tableData[i];
-      outputData.push([input.Food_Name, input.Num_Cooking_Unit,input.Name_Cooking_Unit]);
-  }
-  //Adds data to table
-  var table = document.getElementById('grocery_table')
-
-  var tableBody = load_table(outputData)
-  table.appendChild(tableBody);
-  sortTable();
-};
-</script>
-
-<script type="text/javascript">
-
-function post_request(){
-  var array = [];
-  var headers = [];
-  $('#grocery_table th').each(function(index, item) {
-      headers[index] = $(item).html();
-  });
-  $('#grocery_table tr').has('td').each(function() {
-      var arrayItem = {};
-      $('td', $(this)).each(function(index, item) {
-          arrayItem[headers[index]] = $(item).find('input').val()//.html();
-      });
-      array.push(arrayItem);
-  });
-  var data = JSON.stringify(array);
-
-  url = "/lists"
-  var xhr = createCORSRequest('POST', url);
-  if (!xhr) {
-    throw new Error('CORS not supported');
-  }
-
-  xhr.setRequestHeader("Content-type", "application/json");
-
-  xhr.onerror = function() {console.log('There was an error!');};
-
-  console.log(data)
-  xhr.send(data);
-  return false;
-};
-</script>
-
-<script type="text/javascript">
-function pullList() {
-  listbutton = document.getElementById('pullList')
-  listbutton.className += " disabled"
-  toggle_visibility('ShoppingList')
-  make_request("/lists", createTableList);
-}
-</script>
-
-<script type="text/javascript">
-function createFirstList() {
-  listbutton = document.getElementById('newList')
-  listbutton.className += " disabled"
-  //toggle_visibility('RecipeSelection')
-  toggle_visibility('AddRecipes')
-}
-</script>
-
-<script type="text/javascript">
-function sortTable() {
-  //Using code from link below. 
-  //https://www.w3schools.com/howto/howto_js_sort_table.asp
-  var table, rows, switching, i, x, y, shouldSwitch;
-  table = document.getElementById('grocery_table');
-  switching = true;
-  /*Make a loop that will continue until
-  no switching has been done:*/
-  while (switching) {
-    //start by saying: no switching is done:
-    switching = false;
-    rows = table.getElementsByTagName("TR");
-    /*Loop through all table rows (except the
-    first, which contains table headers):*/
-    for (i = 1; i < (rows.length - 1); i++) {
-      //start by saying there should be no switching:
-      shouldSwitch = false;
-      /*Get the two elements you want to compare,
-      one from current row and one from the next:*/
-      x = rows[i].getElementsByTagName("input")[0];
-      y = rows[i + 1].getElementsByTagName("input")[0];
-      //check if the two rows should switch place:
-      if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
-        //if so, mark as a switch and break the loop:
-        shouldSwitch= true;
-        break;
-      }
-    }
-    if (shouldSwitch) {
-      /*If a switch has been marked, make the switch
-      and mark that a switch has been done:*/
-      rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
-      switching = true;
-    }
-  }
-}
-</script>
-
-
-<script type="text/javascript">
-//All added to combine item
-//Called when button clicked, will create the item list if it doesn't exist, else just adds a row. 
-function addRow(){
-  var table = document.getElementById('grocery_table');
-  var n_rows = table.rows.length;
-
-  var exist = document.getElementById('item')
-  if (exist == null) {
-      make_request("/items",fill_data);
-      var row = table.insertRow(-1);
-  }
-  else { var row = table.insertRow(n_rows-1);}
-
-  var i = 0
-  while (i < table.rows[0].cells.length) {
-    var cell = document.createElement('td');
-    var text = document.createElement('input');
-    text.setAttribute('type', 'text')
-    text.setAttribute('id',"cell" + i.toString()); //This is new
-    text.setAttribute('size', 2);
-    cell.appendChild(text)
-    row.appendChild(cell)
-    i++;
-  }
-  var delcell = document.createElement('td');
-  var deltext = document.createElement('input');
-  deltext.setAttribute('type', 'button');
-  deltext.setAttribute('value', 'X');
-  deltext.setAttribute('onclick', "SomeDeleteRowFunction(this)")
-  delcell.appendChild(deltext);
-  row.appendChild(delcell);
-};
-
-//Fills the list of food items. 
-function fill_data(data){
-  var table = document.getElementById('grocery_table');
-  var n_rows = table.rows.length;
-  var row = table.insertRow(n_rows);
-  var cell = document.createElement('td');
-  var f = document.createElement("form");
-  f.setAttribute('onchange', "return fill_item()");
-  var g = document.createElement("select");
-  g.setAttribute('id',"item");
-  f.appendChild(g)
-  cell.appendChild(f)
-  row.appendChild(cell)
-
-  var def = document.createElement("option");
-  def.value = "Please Select an Item";
-  def.textContent = "Please Select an Item";
-  g.appendChild(def)
-
-  data = data['data']
-  for (var x in data) {
-    var i = document.createElement("option"); //input element, text
-    i.textContent = data[x]['Food_Name']
-    i.value = data[x]['Food_Name']
-    g.appendChild(i)
-  }
-};
-
-function fill_item(){
-  selection = document.getElementById('item').value
-  ulr_str = "/items?item=" + selection
-  make_request(ulr_str,fillz);
-};
-
-//Fills the food item details when the item is selected
-function fillz(data){
-  var data = data['data'][0]
-  var dta = document.getElementsByTagName('tr');
-  n_rows = dta.length;
-  var inp = dta[n_rows-2].getElementsByTagName('input');
-  inp[0].value = data['Food_Name'];
-  inp[0].setAttribute('size', data['Food_Name'].length+2);
-  inp[2].value = data['Name_Cooking_Unit'];
-  inp[2].setAttribute('size', data['Name_Cooking_Unit'].length+2);
-};
-</script>
-
-<script type="text/javascript">
-function toggle_visibility(id) {
-   var e = document.getElementById(id);
-   if(e.style.display == 'block')
-      e.style.display = 'none';
-   else
-      e.style.display = 'block';
-};
-</script>
+{% endblock %}

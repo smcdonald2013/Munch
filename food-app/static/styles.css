@@ -1,68 +1,71 @@
-.btn {
+input[type=button], input[type=submit] {
     background-color: #008CBA; /* Green */
     border: none;
     color: white;
-    padding: 16px 32px;
     text-align: center;
     text-decoration: none;
     display: inline-block;
-    font-size: 16px;
-    border-radius: 6px;
     -webkit-transition-duration: 0.4s; /* Safari */
     transition-duration: 0.4s;
     border: 2px solid #008CBA;
+    margin: 8px;
 }
 
-.btn:hover {
-    /* background-color: white; 
-    color: black; */
-    box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
+.btn {
+    padding: 16px 32px;
+    font-size: 16px;
+    border-radius: 6px;
 }
+
+.btn:hover {box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);}
+
+.btn_small {
+    padding: 12px 24px;
+    font-size: 14px;
+    border-radius: 4px;
+}
+
+.btn_small:hover {box-shadow: 0 9px 12px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);}
 
 .disabled {
     opacity: 0.6;
     cursor: not-allowed;
 }
 
-.btn_small {
-    background-color: #008CBA; /* Green */
-    border: none;
-    color: white;
-    padding: 12px 24px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 14px;
-    border-radius: 4px;
-    -webkit-transition-duration: 0.4s; /* Safari */
-    transition-duration: 0.4s;
-    border: 2px solid #008CBA;
-}
-
-.btn_small:hover {
-    box-shadow: 0 9px 12px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
-}
-
-#grocery_table {
+input[type=text] {
     font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
-    border-collapse: separate;
-    width: 40%;
+    font-size: 12px;
+    font-weight: normal;
+    color: black;
+    padding: 0px; 
+    border: 0px;
+    background-color: transparent;
+}
+
+table {
+    font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+    font-size: 12px;
+    font-weight: bold;
     table-layout: auto;
     border-spacing: 0px;
+    padding: 20px;
     margin: 0px;
     display: block;
     vertical-align: bottom;
+    color: black;
 }
 
-#grocery_table td, #grocery_table th {
+td, th {
     border: 1px solid #ddd;
     padding: 3px;
     margin: 0px;
+    font-size: 14px;
 }
 
-#grocery_table tr:nth-child(even){background-color: #f2f2f2;}
+tr:nth-child(even){background-color: #f2f2f2;}
+tr:hover {background-color: #ddd;}
 
-#grocery_table tr:hover {background-color: #ddd;}
+#grocery_table {border-collapse: separate;}
 
 #grocery_table th {
     padding-top: 8px;
@@ -73,32 +76,9 @@
     color: white;
 }
 
-#recipe_table {
-    font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
-    border-collapse: collapse;
-    width: 40%;
-}
+#recipe_table {border-collapse: collapse;}
 
-#recipe_table td, #recipe_table th {
-    border: 1px solid #ddd;
-    padding: 6px;
-}
-
-#recipe_table tr:nth-child(even){background-color: #f2f2f2;}
-
-#recipe_table tr:hover {background-color: #ddd;}
-
-.headingold h2 {
-    margin: 1em 0 0.5em 0;
-    color: blue;
-    font-weight: normal;
-    font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
-    font-size: 12px;
-    line-height: 16px;
-    text-transform: uppercase;
-    text-shadow: 0 2px white, 0 3px #777;
-    text-align: center;
-}
+#item_table {border-collapse: separate;}
 
 .heading {
     font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
@@ -107,81 +87,26 @@
     text-align: center;
 }
 
-#RecipeSelection {
-    margin: auto;
-    width: 65%;
-    padding: 8px;
-    display: none;
-}
+#ShoppingList {display: none;}
 
-#AddRecipes {
-    margin: auto;
-    width: 70%;
-    padding: 8px;
-    display: none;
-}
+#SubmitButton {text-align:center;}
 
-#AddRecipesButton {
-    margin: auto;
-    width: 70%;
-    padding: 8px;
-}
-
-#RecipesChoosen {
-    margin: auto;
-    width: 70%;
-    padding: 8px;
-    display: none;
-}
-
-#RecipesForm {
-    margin: auto;
-    width: 40%;
-    padding: 8px;
-}
-
-#ShoppingList {
-    margin: auto;
-    width: 45%;
-    padding: 2px;
-    display: none;
-}
-
-#ListButtons {
-    display:inline-block;
-}
-
-#SubmitButton {
-    text-align:center;
-}
-
-#PullOrNew {
-    margin: auto;
-    width: 48%;
-}
+.hide {display: none;}
 
 input[type=email] {
-    padding:5px; 
+    /*padding:5px; */
     border:2px solid #ccc; 
     -webkit-border-radius: 5px;
     border-radius: 5px;
 }
 
-.center {
-    margin: auto;
-    width: 50%;
-    padding: 10px;
-    /*border: 3px solid green;*/
-}
-
-input[type=text] {
-    padding: 0px; 
-    border: 0px;
-    background-color: transparent;
-}
-
 select {
-    padding: 0px; 
-    border: 0px;
+    padding: 4px; 
+    border: 1px solid #ccc;
     background-color: transparent;
+}
+
+.content {
+    display: table;
+    margin: 0 auto;
 }
