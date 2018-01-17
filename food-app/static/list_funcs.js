@@ -53,7 +53,7 @@ function createTable(tableData) {
   var outputData = [];
   for(var i = 0; i < tableData.length; i++) {
       var input = tableData[i];
-      outputData.push([input.Food_Name, input.Food_Units,input.Food_Units_Name]);
+      outputData.push([input.Food_Name, input.Food_Units, input.Food_Units_Name, input.Total_Costs]);
   }
   //Adds data to table
   var table = document.getElementById('grocery_table')

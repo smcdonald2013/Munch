@@ -8,8 +8,8 @@
 
 <div class=content>
   <div class=content>
-  <input id="pullList" type="button" class="btn" value="Pull Existing List" onclick="pullList();" />
-  <input id="newList" type="button" class="btn" value="Create New List" onclick="createFirstList();" />
+    <input id="pullList" type="button" class="btn" value="Pull Existing List" onclick="pullList();" />
+    <input id="newList" type="button" class="btn" value="Create New List" onclick="createFirstList();" />
   </div>
 
   <datalist id="recipes"></datalist>
@@ -38,7 +38,8 @@
       </div>
 
       <div class=content>
-          <input form ="recipes_form" type="button" value="Create Shopping List" class="btn" onclick="createList('#recipe_table tr', '/recipes?recipe=', createTable);" />
+          <!--<input form ="recipes_form" type="button" value="Create Shopping List" class="btn" onclick="createList('#recipe_table tr', '/recipes?recipe=', createTable);" />-->
+          <input form ="recipes_form" type="button" value="Create Shopping List" class="btn" onclick="createList('#recipe_table tr', '/recipe_cost?recipe=', createTable);" />
       </div>
 
   </div>
@@ -50,9 +51,9 @@
         <form id='grocery_form' onsubmit="return post_list_request()">
           <table id='grocery_table'>
           <tr>
-            <th>Food Name</th>
-            <th>Food Units</th>
-            <th>Food Units Name</th>
+            <th>Food</th>
+            <th colspan=2>Amount</th>
+            <th>Cost</th>
           </tr>
           </table>
           <br/>

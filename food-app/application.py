@@ -48,6 +48,21 @@ def list_lookup():
     df = pd.read_sql_query(sql_string, engine)
     return df
 
+def cost_lookup(recipe=None):
+    engine = sqlalchemy.create_engine(SQLALCHEMY_DATABASE_URI)
+    if recipe is not None:   
+        sql_string =  ("SELECT * " 
+                        "FROM Costs as r "
+                        "WHERE r.Recipe_Name = %s "
+                        "ORDER BY r.Food_Name")
+        df = pd.read_sql_query(sql_string, engine, params=(recipe,))
+    else: #If no recipe is provided, pull all of them
+        sql_string =  ("SELECT * " 
+                        "FROM Costs as r "
+                        "ORDER BY r.Recipe_Name")
+        df = pd.read_sql_query(sql_string, engine)
+    return df
+
 def sql_insert(data_df, table):
     engine = sqlalchemy.create_engine(SQLALCHEMY_DATABASE_URI)
     data_df.to_sql(table, engine, index=False, if_exists='append')
@@ -140,6 +155,39 @@ def get_recipe():
         data_final_json = json.dumps(data_dict_final)
     else: 
         data_df = pd.DataFrame(recipe_lookup()['Recipe_Name'].drop_duplicates())
+        data_json = data_df.to_json(orient='records')
+        data_dict = json.loads(data_json)
+        data_dict_final = {'data': data_dict}
+        data_final_json = json.dumps(data_dict_final)
+    return data_final_json
+
+@application.route('/recipe_cost', methods=['GET'])
+def get_recipe_cost():
+    if 'recipe' in request.args:
+        ids = request.args.get('recipe')
+        a = ids.split(",") 
+        data = pd.DataFrame()
+        for recipe in a:
+            recipe_new = str(recipe).strip('\'') #Need to remove quotes for pymysql to handle strings properly
+            df = cost_lookup(recipe)
+            application.logger.debug(df)
+            df = df.drop(['Recipe_Name'], axis=1)
+            data = pd.concat([data, df])
+            num_df = data.groupby('Food_Name').sum()['Food_Units']
+            text_df = data.drop_duplicates('Food_Name')[['Food_Name', 'Food_Units_Name', "Ingredient_Cost"]]
+            text_df = text_df.sort_values(by='Food_Name').set_index('Food_Name')
+            text_df['Food_Units'] = num_df
+            text_df = text_df.round(decimals=2).reset_index()
+            #text_df = text_df[["Food_Name", "Food_Units", "Food_Units_Name", "Food_Alt_Name", "Food_Units"]]
+            text_df = text_df[["Food_Name", "Food_Units", "Food_Units_Name", "Ingredient_Cost"]]
+            text_df['Total_Costs'] = text_df['Food_Units']*text_df['Ingredient_Cost']
+            text_df = text_df[["Food_Name", "Food_Units", "Food_Units_Name", "Ingredient_Cost", "Total_Costs"]]
+        data_json = text_df.to_json(orient='records') #Should probably move out of for loop. 
+        data_dict = json.loads(data_json)
+        data_dict_final = {'data': data_dict}
+        data_final_json = json.dumps(data_dict_final)
+    else: 
+        data_df = pd.DataFrame(cost_lookup()['Recipe_Name'].drop_duplicates())
         data_json = data_df.to_json(orient='records')
         data_dict = json.loads(data_json)
         data_dict_final = {'data': data_dict}
