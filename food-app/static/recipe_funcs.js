@@ -35,7 +35,7 @@ function createTable(tableData) {
   var outputData = [];
   for(var i = 0; i < tableData.length; i++) {
       var input = tableData[i];
-      outputData.push([input.Food_Name, input.Food_Units,input.Food_Units_Name,input.Food_Alt_Units,input.Food_Alt_Name]);
+      outputData.push([input.Food_Name, input.Food_Units,input.Food_Units_Name]);
   }
   //Adds data to table
   var table = document.getElementById('recipe_table')
@@ -64,6 +64,11 @@ function addRow(){
     var text = document.createElement('input');
     text.setAttribute('type', 'text')
     text.setAttribute('id',"cell" + i.toString()); //This is new
+    if (i == 1) {
+      text.setAttribute('size', 4);
+    } else {
+      text.setAttribute('size', 15);
+    }
     cell.appendChild(text)
     row.appendChild(cell)
     i++;
@@ -75,8 +80,10 @@ function fill_data(data){
   var table = document.getElementById('recipe_table');
   var n_rows = table.rows.length;
   var row = table.insertRow(n_rows);
+  row.setAttribute('id',"select_row");
   var cell = document.createElement('td');
   var f = document.createElement("form");
+  f = document.createElement("form");
   f.setAttribute('onchange', "return fill_item()");
   var g = document.createElement("select");
   g.setAttribute('id',"item");

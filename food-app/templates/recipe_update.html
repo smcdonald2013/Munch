@@ -6,6 +6,11 @@
 <script>window.onload = make_request("/recipes", load_data);</script>
 
 <div class="content">
+
+  <div class='content'>
+    <h1>Recipes</h1>
+  </div>
+
   <div class="content">
     <form onchange="return fill_selection()">
       <select id="item_list">
@@ -25,26 +30,23 @@
       <th>Food Name</th>
       <th>Food Units</th>
       <th>Food Units Name</th>
-      <th>Food Alt Units</th>
-      <th>Food Alt Name</th>
     </tr>
     <tbody>
         <tr>
-        <td><INPUT TYPE="TEXT" NAME="Food_Name" SIZE="20" id='fn'></td>
-        <td><INPUT TYPE="TEXT" NAME="Food_Units" SIZE="20" id='fu'></td>
-        <td><INPUT TYPE="TEXT" NAME="Food_Units_Name" SIZE="20" id='fun'></td>
-        <td><INPUT TYPE="TEXT" NAME="Food_Alt_Units" SIZE="20" id='fau'></td>
-        <td><INPUT TYPE="TEXT" NAME="Food_Alt_Name" SIZE="20" id='fan'></td>
+        <td><input type="text" name="Food_Name" size="20" id='fn'></td>
+        <td><input type="text" name="Food_Units" size="20" id='fu'></td>
+        <td><input type="text" name="Food_Units_Name" size="20" id='fun'></td>
         </tr>
     </tbody>
     </table>
   </form>
 
   <div class="content">
-    <input id="clickMe" type="button" class="btn_small" value="Add Row" onclick="addRow();">
+    <input id="addRowBtn" type="button" class="btn_small" value="Add Row" onclick="addRow();">
   </div>
+
   <div class="content">
-    <input form ="recipe_form" type="submit" class="btn_small" value="Submit">
+    <input form="recipe_form" type="submit" class="btn_small" value="Submit">
   </div>
 </div>
 {% endblock %}

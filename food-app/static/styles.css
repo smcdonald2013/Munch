@@ -27,6 +27,8 @@ input[type=button], input[type=submit] {
 
 .btn_small:hover {box-shadow: 0 9px 12px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);}
 
+#addRowBtn {margin: 20px 0px 0px;}
+
 .disabled {
     opacity: 0.6;
     cursor: not-allowed;
@@ -40,11 +42,12 @@ input[type=text] {
     padding: 0px; 
     border: 0px;
     background-color: transparent;
+    text-align: left;
 }
 
 table {
     font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
-    font-size: 12px;
+    font-size: 14px;
     font-weight: bold;
     table-layout: auto;
     border-spacing: 0px;
@@ -55,19 +58,9 @@ table {
     color: black;
 }
 
-td, th {
+th {
     border: 1px solid #ddd;
-    padding: 0px;
     margin: 0px;
-    font-size: 14px;
-}
-
-tr:nth-child(even){background-color: #f2f2f2;}
-tr:hover {background-color: #ddd;}
-
-#grocery_table {border-collapse: separate;}
-
-#grocery_table th {
     padding-top: 8px;
     padding-bottom: 8px;
     text-align: center;
@@ -76,13 +69,31 @@ tr:hover {background-color: #ddd;}
     color: white;
 }
 
+td {
+    padding: 4px;
+    margin: 0px;
+}
+
+tr:nth-child(even){background-color: #f2f2f2;}
+tr:hover {background-color: #ddd;}
+
+#recipe_table tr td:nth-child(2) {
+    text-align: right;
+}
+
+#grocery_table {border-collapse: separate;}
+
 #recipe_table {border-collapse: collapse;}
 
 #item_table {border-collapse: separate;}
 
 #item_table td {
-    padding: 4px;
+    border: 1px solid #ddd;
 }
+
+#select_row {background-color: white;}
+
+#item {margin: 2px;}
 
 .heading {
     font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;

@@ -60,7 +60,7 @@ function load_table(tableData){
       text.setAttribute('type', 'text')
       text.value = cellData
       text.innerHTML = cellData
-      text.setAttribute('size', cellData.toString().length+2);
+      text.setAttribute('size', cellData.toString().length);
       cell.appendChild(text);
       row.appendChild(cell);
     });
