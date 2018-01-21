@@ -27,7 +27,9 @@ input[type=button], input[type=submit] {
 
 .btn_small:hover {box-shadow: 0 9px 12px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);}
 
-#addRowBtn {margin: 20px 0px 0px;}
+#addRowBtn {margin: 10px 0px 0px;}
+
+#delete_button {margin: 0px;}
 
 .disabled {
     opacity: 0.6;

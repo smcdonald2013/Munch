@@ -61,6 +61,15 @@ function createTable(tableData) {
   var tableBody = load_table(outputData)
   table.appendChild(tableBody);
   appendColumn();
+
+  //Adds to content section to push footer down
+  var content = document.getElementById('content-inner')
+  var content_height = content.clientHeight
+  var table_height = table.clientHeight
+  var new_height = content_height+table_height+60
+  console.log(content_height)
+  console.log(table_height)
+  content.style.height = new_height.toString()+"px"
 };
 
 // append column to the HTML table
@@ -73,6 +82,7 @@ function appendColumn() {
         var delcell = document.createElement('td');
         var deltext = document.createElement('input');
         deltext.setAttribute('type', 'button');
+        deltext.setAttribute('id', 'delete_button');
         deltext.setAttribute('value', 'X');
         deltext.setAttribute('onclick', "SomeDeleteRowFunction(this)")
         delcell.appendChild(deltext);
