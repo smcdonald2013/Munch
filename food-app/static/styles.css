@@ -1,5 +1,5 @@
 input[type=button], input[type=submit] {
-    background-color: #008CBA; /* Green */
+    background-color: #008CBA; 
     border: none;
     color: white;
     text-align: center;
@@ -111,7 +111,6 @@ tr:hover {background-color: #ddd;}
 .hide {display: none;}
 
 input[type=email] {
-    /*padding:5px; */
     border:2px solid #ccc; 
     -webkit-border-radius: 5px;
     border-radius: 5px;
