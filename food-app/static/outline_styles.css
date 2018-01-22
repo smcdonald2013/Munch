@@ -26,7 +26,7 @@ h1, h2, h3, h4, h5, h6 {color:darkblue;}
 #top-nav ul li.active a, #top-nav ul li a:hover { color:#d3d3f9;}
 
 /* Content */
-#content-inner { margin:0 auto; padding:8px; width:970px;height:600px;background:#fff;}
+#content-inner { margin:0 auto; padding:8px; width:970px;height:550px;background:#fff;}
 #content #contentbar { margin:0; padding:0; float:right; width:760px;}
 #content #contentbar .article { margin:0 0 24px; padding:0 20px 0 15px; }
 #content #sidebar { padding:0; float:left; width:200px;}

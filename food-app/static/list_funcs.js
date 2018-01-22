@@ -66,9 +66,7 @@ function createTable(tableData) {
   var content = document.getElementById('content-inner')
   var content_height = content.clientHeight
   var table_height = table.clientHeight
-  var new_height = content_height+table_height+60
-  console.log(content_height)
-  console.log(table_height)
+  var new_height = content_height+table_height+110
   content.style.height = new_height.toString()+"px"
 };
 

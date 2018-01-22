@@ -44,6 +44,14 @@ function createTable(tableData) {
   }
   var tableBody = load_table(outputData)
   table.appendChild(tableBody);
+
+    //Adds to content section to push footer down
+  var content = document.getElementById('content-inner')
+  var content_height = content.clientHeight
+  var table_height = table.clientHeight
+  var add_height = table_height-content_height+250
+  var new_height = Math.max(add_height,0)+content_height
+  content.style.height = new_height.toString()+"px"
 };
 
 //Called when button clicked, will create the item list if it doesn't exist, else just adds a row. 
