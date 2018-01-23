@@ -26,17 +26,17 @@ h1, h2, h3, h4, h5, h6 {color:darkblue;}
 #top-nav ul li.active a, #top-nav ul li a:hover { color:#d3d3f9;}
 
 /* Content */
-#content-inner { margin:0 auto; padding:8px; width:970px;height:550px;background:#fff;}
+#content-inner { margin:0 auto; padding:0px; width:986px;height:550px;background:#fff;}
 #content #contentbar { margin:0; padding:0; float:right; width:760px;}
 #content #contentbar .article { margin:0 0 24px; padding:0 20px 0 15px; }
-#content #sidebar { padding:0; float:left; width:200px; background:blue; margin: 10px 0px 0px 10px;}
-#content #sidebar .widget { margin:0 0 12px; padding:8px 8px 8px 13px;line-height:1.4em;}
-#content #sidebar .widget h3 { color:#d3d3f9; font-size:18px; font-weight:bold;}
+#content #sidebar { padding:-8px; float:left; width:200px; margin: 0px 0px 0px 0px; height:550px; border-right: gray solid 2px;}
+#content #sidebar .widget { margin:0 0 12px; padding:10px 10px 10px 15px;line-height:1.4em;}
+#content #sidebar .widget h3 { color:blue; font-size:18px; font-weight:bold;}
 #content #sidebar .widget h3 a { text-decoration:none;}
 #content #sidebar .widget ul { margin:0; padding:0; list-style:none; color:#959595;}
-#content #sidebar .widget ul li { margin:0;}
+#content #sidebar .widget ul li { margin:2px;}
 #content #sidebar .widget ul li { padding:4px 0; width:185px;}
-#content #sidebar .widget ul li a { color:#d3d3f9; text-decoration:none; margin-left:-8px; padding:4px 8px 4px 16px; font-size: 14px;}
+#content #sidebar .widget ul li a { color:blue; text-decoration:none; margin-left:-4px; padding:4px 8px 4px 16px; font-size: 14px;}
 #content #sidebar .widget ul li a:hover { color:#d3d3f9; font-weight:bold; text-decoration:none;}
 
 /* Footerblurb */

@@ -1,5 +1,8 @@
 input[type=button], input[type=submit] {
     background-color: #008CBA; 
+    background: -webkit-linear-gradient(#65a9d7, #3e779d);
+    background:    -moz-linear-gradient(#65a9d7, #3e779d);
+    background:         linear-gradient(#65a9d7, #3e779d);
     border: none;
     color: white;
     text-align: center;
@@ -67,6 +70,9 @@ th {
     padding-bottom: 8px;
     text-align: center;
     background-color: #008CBA; 
+    background: -webkit-linear-gradient(#65a9d7, #3e779d);
+    background:    -moz-linear-gradient(#65a9d7, #3e779d);
+    background:         linear-gradient(#65a9d7, #3e779d);
     border-radius: 6px;
     color: white;
 }
