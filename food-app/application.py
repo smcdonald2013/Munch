@@ -111,7 +111,11 @@ def get_item():
         data_dict_final = {'data': data_dict}
         data_final_json = json.dumps(data_dict_final)
     else:
-        data_json =pd.DataFrame(item_lookup()['Food_Name']).to_json(orient='records')
+        #data_json =pd.DataFrame(item_lookup()['Food_Name']).to_json(orient='records')
+        #data_dict = json.loads(data_json)
+        #data_dict_final = {'data': data_dict}
+        #data_final_json = json.dumps(data_dict_final)
+        data_json =pd.DataFrame(item_lookup()).to_json(orient='records')
         data_dict = json.loads(data_json)
         data_dict_final = {'data': data_dict}
         data_final_json = json.dumps(data_dict_final)
