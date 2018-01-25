@@ -24,29 +24,31 @@
     <input type='hidden' id='hidden_input'>
   </div>
 
-  <form id='recipe_form' onsubmit="return post_recipe_request()">
-    <table id='recipe_table'>
-    <tr>
-      <th>Food Name</th>
-      <th>Food Units</th>
-      <th>Food Units Name</th>
-    </tr>
-    <tbody>
-        <tr>
-        <td><input type="text" name="Food_Name" size="20" id='fn'></td>
-        <td><input type="text" name="Food_Units" size="20" id='fu'></td>
-        <td><input type="text" name="Food_Units_Name" size="20" id='fun'></td>
-        </tr>
-    </tbody>
-    </table>
-  </form>
+  <div id='recipe_obj'>
+    <form id='recipe_form' onsubmit="return post_recipe_request()">
+      <table id='recipe_table'>
+      <tr>
+        <th>Food Name</th>
+        <th>Food Units</th>
+        <th>Food Units Name</th>
+      </tr>
+      <tbody>
+          <tr>
+          <td><input type="text" name="Food_Name" size="20" id='fn'></td>
+          <td><input type="text" name="Food_Units" size="20" id='fu'></td>
+          <td><input type="text" name="Food_Units_Name" size="20" id='fun'></td>
+          </tr>
+      </tbody>
+      </table>
+    </form>
 
-  <div class="content">
-    <input id="addRowBtn" type="button" class="btn_small" value="Add Row" onclick="addRow();">
-  </div>
+    <div class="content">
+      <input id="addRowBtn" type="button" class="btn_small" value="Add Row" onclick="addRow();">
+    </div>
 
-  <div class="content">
-    <input form="recipe_form" type="submit" class="btn_small" value="Submit">
+    <div class="content">
+      <input form="recipe_form" type="submit" class="btn_small" value="Submit">
+    </div>
   </div>
 </div>
 {% endblock %}

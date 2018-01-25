@@ -114,6 +114,8 @@ tr:hover {background-color: #ddd;}
 
 #SubmitButton {text-align:center;}
 
+#recipe_obj {display: none;}
+
 .hide {display: none;}
 
 input[type=email] {

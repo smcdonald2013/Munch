@@ -11,6 +11,10 @@ function load_data(data){
 
 //Fills recipe selected (calls create table)
 function fill_selection(){
+  var e = document.getElementById('recipe_obj')
+  if(e.style.display != "block"){
+    toggle_visibility('recipe_obj')
+  }
   selection = document.getElementById('item_list').value
   var hidden = document.getElementById('hidden_input');
   if (selection == "New Recipe"){
