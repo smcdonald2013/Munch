@@ -89,12 +89,6 @@ tr:hover {background-color: #ddd;}
     text-align: right;
 }
 
-#grocery_table {border-collapse: separate;}
-
-#recipe_table {border-collapse: collapse;}
-
-#item_table {border-collapse: separate;}
-
 #item_table td {
     border: 1px solid #ddd;
 }
@@ -113,8 +107,6 @@ tr:hover {background-color: #ddd;}
 #ShoppingList {display: none;}
 
 #SubmitButton {text-align:center;}
-
-#recipe_obj {display: none;}
 
 .hide {display: none;}
 
