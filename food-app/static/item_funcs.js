@@ -18,7 +18,7 @@ function fill_selection(){
   if (selection != "New Item"){
     //ulr_str = "/items?item=" + selection
     //make_request(ulr_str,process_request);
-    selection_index = document.getElementById("item_list").selectedIndex
+    selection_index = document.getElementById("item_list").selectedIndex-2
     console.log(item_data[selection_index])
     process_request(item_data[selection_index])
   }
