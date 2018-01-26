@@ -158,8 +158,15 @@ def get_recipe():
         data_dict_final = {'data': data_dict}
         data_final_json = json.dumps(data_dict_final)
     else: 
-        data_df = pd.DataFrame(recipe_lookup()['Recipe_Name'].drop_duplicates())
-        data_json = data_df.to_json(orient='records')
+        #data_df = pd.DataFrame(recipe_lookup()['Recipe_Name'].drop_duplicates())
+        #data_json = data_df.to_json(orient='records')
+        #data_dict = json.loads(data_json)
+        #data_dict_final = {'data': data_dict}
+        #data_final_json = json.dumps(data_dict_final)
+        data_df = pd.DataFrame(recipe_lookup())
+        data_json = data_df.groupby('Recipe_Name').apply(lambda x: x.to_json(orient='records'))
+        data_json = data_json.apply(lambda x: json.loads(x))
+        data_json = data_json.reset_index().to_json(orient='records')
         data_dict = json.loads(data_json)
         data_dict_final = {'data': data_dict}
         data_final_json = json.dumps(data_dict_final)

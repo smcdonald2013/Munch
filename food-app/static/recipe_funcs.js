@@ -1,10 +1,14 @@
+var recipe_data;
+var item_data;
+
 function load_data(data){
   var g = document.getElementById("item_list")
-  data = data['data']
-  for (var x in data) {
+  recipe_data = data['data']
+  console.log(recipe_data)
+  for (var x in recipe_data) {
       var i = document.createElement("option"); //input element, text
-      i.textContent = data[x]['Recipe_Name'];
-      i.value = data[x]['Recipe_Name']
+      i.textContent = recipe_data[x]['Recipe_Name'];
+      i.value = recipe_data[x]['Recipe_Name']
       g.appendChild(i);
   }
 };
@@ -27,15 +31,15 @@ function fill_selection(){
   }
   else {
     hidden.type = 'hidden';
-    ulr_str = "/recipes?recipe=" + selection
-    make_request(ulr_str,createTable);
+    selection_index = document.getElementById("item_list").selectedIndex-2
+    createTable(recipe_data[selection_index]["0"])
   }
 };
 
 //Builds the table containing the recipe
 function createTable(tableData) {
   //Converts JSON to multidimensional araray
-  tableData = tableData['data']
+  //tableData = tableData['data']
   var outputData = [];
   for(var i = 0; i < tableData.length; i++) {
       var input = tableData[i];
@@ -108,42 +112,28 @@ function fill_data(data){
   def.textContent = "Please Select an Item";
   g.appendChild(def)
 
-  data = data['data']
-  for (var x in data) {
+  item_data = data['data']
+  for (var x in item_data) {
     var i = document.createElement("option"); //input element, text
-    i.textContent = data[x]['Food_Name']
-    i.value = data[x]['Food_Name']
+    i.textContent = item_data[x]['Food_Name']
+    i.value = item_data[x]['Food_Name']
     g.appendChild(i)
   }
 };
 
 function fill_item(){
-  selection = document.getElementById('item').value
-  ulr_str = "/items?item=" + selection
-  make_request(ulr_str,fillz);
+  //selection = document.getElementById('item').value
+  selection_index = document.getElementById("item").selectedIndex-1
+  process_request(item_data[selection_index])
 };
 
 //Fills the food item details when the item is selected
-function fillz(data){
-  var data = data['data'][0]
+function process_request(data){
   var dta = document.getElementsByTagName('tr');
   n_rows = dta.length;
   var inp = dta[n_rows-2].getElementsByTagName('input');
   inp[0].value = data['Food_Name'];
   inp[2].value = data['Name_Cooking_Unit'];
-};
-
-
-//Fills the fields with request data
-function process_request(data){
-  var data = data['data'][0]
-  console.log(data)
-  document.getElementById('Name').value = data['Food_Name'];
-  document.getElementById('NumPU').value = data['Num_Purchase_Unit'];
-  document.getElementById('NamePU').value = data['Name_Purchase_Unit'];
-  document.getElementById('PPU').value = data['Price_Purchase_Unit'];
-  document.getElementById('NumCU').value = data['Num_Cooking_Unit'];
-  document.getElementById('NameCU').value = data['Name_Cooking_Unit'];
 };
 
 //Sends the recipe to the API

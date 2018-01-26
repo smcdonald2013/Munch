@@ -3,7 +3,6 @@ var item_data;
 function load_data(data){
   var g = document.getElementById("item_list")
   item_data = data['data']
-  console.log(item_data)
   for (var x in item_data) {
       var i = document.createElement("option"); //input element, text
       i.textContent = item_data[x]['Food_Name'];
@@ -19,7 +18,6 @@ function fill_selection(){
     //ulr_str = "/items?item=" + selection
     //make_request(ulr_str,process_request);
     selection_index = document.getElementById("item_list").selectedIndex-2
-    console.log(item_data[selection_index])
     process_request(item_data[selection_index])
   }
   else {
