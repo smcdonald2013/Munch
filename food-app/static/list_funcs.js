@@ -1,18 +1,19 @@
+var recipe_data;
+var item_data;
+
 //Makes the get request that pulls list of recipes
 function load_recipes(data){
   var g = document.getElementById('recipes');
-  data = data['data']
-
-  for (var x in data) {
+  recipe_data = data['data']
+  for (var x in recipe_data) {
     var i = document.createElement("option"); //input element, text
-    i.textContent = data[x]['Recipe_Name'];
-    i.value = data[x]['Recipe_Name']
+    i.textContent = recipe_data[x]['Recipe_Name'];
+    i.value = recipe_data[x]['Recipe_Name']
     g.appendChild(i);
   }
 };
 
 function addToList(tableid, listid){
-  //toggle_visibility('RecipesChoosen') //This should be cleaned up
   e = document.getElementById('RecipesChoosen')
   e.style.display = 'block'
   var table = document.getElementById(tableid);
@@ -64,9 +65,15 @@ function createTable(tableData) {
 
   //Adds to content section to push footer down
   var content = document.getElementById('content-inner')
+  var recipe_selection = document.getElementById('RecipesChoosen')
+  var recipe_section = document.getElementById('RecipesGroup')
   var content_height = content.clientHeight
   var table_height = table.clientHeight
-  var new_height = content_height+table_height+110
+  var recipe_height = recipe_selection.clientHeight
+  var select_height = recipe_section.clientHeight
+  //var new_height = content_height+table_height+110
+  var add_height = table_height+recipe_height+select_height-content_height+400
+  var new_height = Math.max(add_height,0)+content_height
   content.style.height = new_height.toString()+"px"
 };
 
@@ -164,7 +171,7 @@ function addRow(){
   else { var row = table.insertRow(n_rows-1);}
 
   var i = 0
-  while (i < table.rows[0].cells.length) {
+  while (i < table.rows[1].cells.length-1) {
     var cell = document.createElement('td');
     var text = document.createElement('input');
     text.setAttribute('type', 'text')
@@ -177,6 +184,7 @@ function addRow(){
   var delcell = document.createElement('td');
   var deltext = document.createElement('input');
   deltext.setAttribute('type', 'button');
+  deltext.setAttribute('id', 'delete_button');
   deltext.setAttribute('value', 'X');
   deltext.setAttribute('onclick', "SomeDeleteRowFunction(this)")
   delcell.appendChild(deltext);
@@ -188,6 +196,7 @@ function fill_data(data){
   var table = document.getElementById('grocery_table');
   var n_rows = table.rows.length;
   var row = table.insertRow(n_rows);
+  row.setAttribute('id',"select_row");
   var cell = document.createElement('td');
   var f = document.createElement("form");
   f.setAttribute('onchange', "return fill_item()");
@@ -202,24 +211,22 @@ function fill_data(data){
   def.textContent = "Please Select an Item";
   g.appendChild(def)
 
-  data = data['data']
-  for (var x in data) {
+  item_data = data['data']
+  for (var x in item_data) {
     var i = document.createElement("option"); //input element, text
-    i.textContent = data[x]['Food_Name']
-    i.value = data[x]['Food_Name']
+    i.textContent = item_data[x]['Food_Name']
+    i.value = item_data[x]['Food_Name']
     g.appendChild(i)
   }
 };
 
 function fill_item(){
-  selection = document.getElementById('item').value
-  ulr_str = "/items?item=" + selection
-  make_request(ulr_str,fillz);
+  selection_index = document.getElementById("item").selectedIndex-1
+  process_request(item_data[selection_index])
 };
 
 //Fills the food item details when the item is selected
-function fillz(data){
-  var data = data['data'][0]
+function process_request(data){
   var dta = document.getElementsByTagName('tr');
   n_rows = dta.length;
   var inp = dta[n_rows-2].getElementsByTagName('input');

@@ -1,15 +1,15 @@
 var recipe_data;
 var item_data;
 
+//Makes the get request that pulls list of recipes
 function load_data(data){
   var g = document.getElementById("item_list")
   recipe_data = data['data']
-  console.log(recipe_data)
   for (var x in recipe_data) {
-      var i = document.createElement("option"); //input element, text
-      i.textContent = recipe_data[x]['Recipe_Name'];
-      i.value = recipe_data[x]['Recipe_Name']
-      g.appendChild(i);
+    var i = document.createElement("option"); //input element, text
+    i.textContent = recipe_data[x]['Recipe_Name'];
+    i.value = recipe_data[x]['Recipe_Name']
+    g.appendChild(i);
   }
 };
 
@@ -53,7 +53,7 @@ function createTable(tableData) {
   var tableBody = load_table(outputData)
   table.appendChild(tableBody);
 
-    //Adds to content section to push footer down
+  //Adds to content section to push footer down
   var content = document.getElementById('content-inner')
   var content_height = content.clientHeight
   var table_height = table.clientHeight
@@ -122,7 +122,6 @@ function fill_data(data){
 };
 
 function fill_item(){
-  //selection = document.getElementById('item').value
   selection_index = document.getElementById("item").selectedIndex-1
   process_request(item_data[selection_index])
 };
