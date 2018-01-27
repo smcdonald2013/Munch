@@ -71,7 +71,6 @@ function createTable(tableData) {
   var table_height = table.clientHeight
   var recipe_height = recipe_selection.clientHeight
   var select_height = recipe_section.clientHeight
-  //var new_height = content_height+table_height+110
   var add_height = table_height+recipe_height+select_height-content_height+400
   var new_height = Math.max(add_height,0)+content_height
   content.style.height = new_height.toString()+"px"
@@ -82,7 +81,6 @@ function appendColumn() {
     var tbl = document.getElementById('grocery_table') // table reference
     // open loop for each row and append cell
     for (var i = 1; i < tbl.rows.length; i++) {
-        //createCell(tbl.rows[i].insertCell(tbl.rows[i].cells.length), i, 'col');
         var cellnum = tbl.rows[i].cells.length
         var delcell = document.createElement('td');
         var deltext = document.createElement('input');
@@ -92,7 +90,6 @@ function appendColumn() {
         deltext.setAttribute('onclick', "SomeDeleteRowFunction(this)")
         delcell.appendChild(deltext);
         tbl.rows[i].appendChild(delcell);
-        //input type="button" value="Delete Row" onclick="SomeDeleteRowFunction(this)"
     }
 };
 
@@ -152,8 +149,6 @@ function pullList() {
 function createFirstList() {
   listbutton = document.getElementById('newList')
   listbutton.className += " disabled"
-  //toggle_visibility('RecipeSelection')
-  //toggle_visibility('AddRecipes')
   toggle_visibility('RecipesGroup')
 };
 
