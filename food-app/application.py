@@ -63,6 +63,21 @@ def cost_lookup(recipe=None):
         df = pd.read_sql_query(sql_string, engine)
     return df
 
+def links_lookup(recipe=None):
+    engine = sqlalchemy.create_engine(SQLALCHEMY_DATABASE_URI)
+    if recipe is not None:   
+        sql_string =  ("SELECT * " 
+                        "FROM Links as l "
+                        "WHERE l.Recipe_Name = %s "
+                        "ORDER BY l.Recipe_Name")
+        df = pd.read_sql_query(sql_string, engine, params=(recipe,))
+    else: #If no recipe is provided, pull all of them
+        sql_string =  ("SELECT * " 
+                        "FROM Links as l "
+                        "ORDER BY l.Recipe_Name")
+        df = pd.read_sql_query(sql_string, engine)
+    return df
+
 def sql_insert(data_df, table):
     engine = sqlalchemy.create_engine(SQLALCHEMY_DATABASE_URI)
     data_df.to_sql(table, engine, index=False, if_exists='append')
@@ -250,6 +265,17 @@ def create_list():
     sql_insert(data_df, table='Lists')
     #sql_insert(data_df, table='ListsNew')
     return data_df.to_json(orient='values')
+
+@application.route('/links', methods=['GET'])
+def get_link():
+    data_df = pd.DataFrame(links_lookup())
+    data_json = data_df.groupby('Recipe_Name').apply(lambda x: x.to_json(orient='records'))
+    data_json = data_json.apply(lambda x: json.loads(x))
+    data_json = data_json.reset_index().to_json(orient='records')
+    data_dict = json.loads(data_json)
+    data_dict_final = {'data': data_dict}
+    data_final_json = json.dumps(data_dict_final)
+    return data_final_json
 
 ###Helper functions
 @application.before_request

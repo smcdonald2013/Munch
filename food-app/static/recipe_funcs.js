@@ -13,6 +13,17 @@ function load_data(data){
   }
 };
 
+function load_links(data){
+  var g = document.getElementById("item_list")
+  recipe_data = data['data']
+  for (var x in recipe_data) {
+    var i = document.createElement("option"); //input element, text
+    i.textContent = recipe_data[x]['Recipe_Name'];
+    i.value = recipe_data[x]['Recipe_Name']
+    g.appendChild(i);
+  }
+};
+
 //Fills recipe selected (calls create table)
 function fill_selection(){
   var e = document.getElementById('recipe_obj')

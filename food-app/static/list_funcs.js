@@ -1,5 +1,6 @@
 var recipe_data;
 var item_data;
+var links_data;
 
 //Makes the get request that pulls list of recipes
 function load_recipes(data){
@@ -13,6 +14,25 @@ function load_recipes(data){
   }
 };
 
+function load_links(data){
+  links_data = data['data']
+  recipe_tags = new Set()
+  for (var i = 0; i < links_data.length; i++) {
+    recipe = links_data[i]["0"]["0"]
+    recipe_tags.add(recipe['Item1'])
+    recipe_tags.add(recipe['Item2'])
+    recipe_tags.add(recipe['Item3'])
+  }  
+  var g = document.getElementById('recipe_sort');
+  recipe_tags.forEach(function(item) {
+    var i = document.createElement("option"); //input element, text
+    i.textContent = item;
+    i.value = item;
+    g.appendChild(i);
+  });
+
+};
+
 function addToList(tableid, listid){
   e = document.getElementById('RecipesChoosen')
   e.style.display = 'block'
@@ -21,11 +41,21 @@ function addToList(tableid, listid){
 
   var row = table.insertRow(-1);
   var cell = document.createElement('td');
-  var text = document.createElement('input');
-  text.setAttribute('type', 'text')
+  //var text = document.createElement('input');
+  //text.setAttribute('type', 'text')
   var entry = document.getElementById(listid);
-  text.value = entry.value;
-  cell.appendChild(text)
+  //text.value = entry.value;
+  for (var i = 0; i < links_data.length; i++) {
+    recipe = links_data[i]
+    if (recipe.Recipe_Name == entry.value) {
+      var a = document.createElement('a');
+      a.href = recipe['0']['0']['Link']
+      a.innerHTML = entry.value
+      console.log(recipe['0']['0']['Link'])
+    }
+  }  
+  //cell.appendChild(text)
+  cell.appendChild(a)
   row.appendChild(cell)
 };
 
@@ -36,7 +66,8 @@ function createList(tablestring, urlbase, requestfunc){
 
   $(tablestring).has('td').each(function() {
       $('td', $(this)).each(function(index, item) {
-          arrayitem = $(item).find('input').val()//.html();
+          //arrayitem = $(item).find('input').val()//.html();
+          arrayitem = $(item).find('a').html()//.html();
           myTableArray.push(arrayitem)
       });
   });

@@ -5,6 +5,7 @@
 <script src="static/list_funcs.js" type="text/javascript"></script>
 
 <script>window.onload = make_request("/recipes", load_recipes);</script>
+<script>window.onload = make_request("/links", load_links);</script>
 
 <div class=content>
   <div class=content>
@@ -20,6 +21,10 @@
     </div>
 
     <div class=content id="AddRecipesButton">
+      <select id="recipe_sort">
+        <option value="Recipe Types">Recipe Types</option>
+        <option value="All Recipes">All Recipes</option>
+      </select>
       <input id="recipelist" type="email" list="recipes" multiple>
       <input id="clickMe" type="button" value="Add Recipe" class="btn" onclick="addToList('recipe_table', 'recipelist');" />
     </div>
