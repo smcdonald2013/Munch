@@ -139,3 +139,34 @@ function SomeDeleteRowFunction(o) {
      var p=o.parentNode.parentNode;
          p.parentNode.removeChild(p);
 };
+
+function createTableNew(tableData, columns, table_id, deleteRow=false) {
+  //Converts JSON to multidimensional araray
+  var outputData = [];
+  for(var i = 0; i < tableData.length; i++) {
+      var input = tableData[i];
+      outputData.push([input[columns[0]], input[columns[1]], input[columns[2]], input[columns[0]]]);
+  }
+  //Adds data to table
+  var table = document.getElementById(table_id)
+  if (deleteRow) {
+    while(table.rows.length > 1) {
+      table.deleteRow(-1);
+    }
+  }
+  var tableBody = load_table(outputData)
+  table.appendChild(tableBody);
+};
+
+
+function load_data(data, element_id, data_column){
+  var g = document.getElementById(element_id);
+  recipe_data = data['data']
+  for (var x in recipe_data) {
+    var i = document.createElement("option"); //input element, text
+    i.textContent = recipe_data[x][data_column];
+    i.value = recipe_data[x][data_column]
+    g.appendChild(i);
+  }
+};
+

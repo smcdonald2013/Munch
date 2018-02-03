@@ -2,26 +2,8 @@ var recipe_data;
 var item_data;
 
 //Makes the get request that pulls list of recipes
-function load_data(data){
-  var g = document.getElementById("item_list")
-  recipe_data = data['data']
-  for (var x in recipe_data) {
-    var i = document.createElement("option"); //input element, text
-    i.textContent = recipe_data[x]['Recipe_Name'];
-    i.value = recipe_data[x]['Recipe_Name']
-    g.appendChild(i);
-  }
-};
-
-function load_links(data){
-  var g = document.getElementById("item_list")
-  recipe_data = data['data']
-  for (var x in recipe_data) {
-    var i = document.createElement("option"); //input element, text
-    i.textContent = recipe_data[x]['Recipe_Name'];
-    i.value = recipe_data[x]['Recipe_Name']
-    g.appendChild(i);
-  }
+function load_recipes(data){
+  load_data(data, 'item_list', 'Recipe_Name')
 };
 
 //Fills recipe selected (calls create table)

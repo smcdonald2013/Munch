@@ -4,14 +4,7 @@ var links_data;
 
 //Makes the get request that pulls list of recipes
 function load_recipes(data){
-  var g = document.getElementById('recipes');
-  recipe_data = data['data']
-  for (var x in recipe_data) {
-    var i = document.createElement("option"); //input element, text
-    i.textContent = recipe_data[x]['Recipe_Name'];
-    i.value = recipe_data[x]['Recipe_Name']
-    g.appendChild(i);
-  }
+  load_data(data, 'recipes', 'Recipe_Name')
 };
 
 function load_links(data){
