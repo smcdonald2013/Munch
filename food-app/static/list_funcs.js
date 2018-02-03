@@ -30,7 +30,29 @@ function load_links(data){
     i.value = item;
     g.appendChild(i);
   });
+};
 
+function recipe_filters(){
+  selection = document.getElementById('recipe_sort').value
+  recipe_tags = new Set()
+  for (var i = 0; i < links_data.length; i++) {
+    recipe = links_data[i]["0"]["0"]
+    list = [recipe['Item1'], recipe['Item2'], recipe['Item3']]
+    if (list.indexOf(selection) >= 0) {
+      recipe_tags.add(links_data[i]["Recipe_Name"])
+    }
+  }
+  recipe_list = document.getElementById('recipes').options
+  for(var i = 0; i < recipe_list.length; i++){
+    recipe = recipe_list[i]
+    if (recipe_tags.has(recipe.value)) {
+      recipe.setAttribute("hidden", false);
+    }
+    else{
+      recipe.setAttribute("hidden", true);
+    }
+  }
+  console.log(document.getElementById('recipelist'))
 };
 
 function addToList(tableid, listid){
